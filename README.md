@@ -8,7 +8,7 @@ the build time from 16 minutes to just 2 minutes - for 32 variants.
 ## Installation
 
 ```sh
-npm install parallel-webpack --save-dev 
+npm install parallel-webpack --save-dev
 ```
 
 You can choose whether to install `parallel-webpack` globally or locally.
