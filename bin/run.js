@@ -9,10 +9,12 @@ var run = require('../index').run,
         default: {
             watch: false,
             'max-retries': Infinity,
-            config: 'webpack.config.js'
+            config: 'webpack.config.js',
+            'parallel': require('os').cpus().length
         },
         alias: {
-            'm': 'max-retries'
+            'm': 'max-retries',
+            'p': 'parallel'
         }
     }),
     configPath;
@@ -21,7 +23,8 @@ try {
     configPath = require.resolve(process.cwd() + '/' + argv.config);
     run(configPath, {
         watch: argv.watch,
-        maxRetries: Number.parseInt(argv['max-retries'], 10)
+        maxRetries: Number.parseInt(argv['max-retries'], 10),
+        maxConcurrentWorkers: Number.parseInt(argv['parallel'], 10)
     });
 } catch(e) {
     console.error('[WEBPACK] Could not load configuration %s', process.cwd() + '/' + argv.config);

@@ -58,8 +58,12 @@ function run(configPath, options, callback) {
 
     var watch = options && !!options.watch,
         maxRetries = options && Number.parseInt(options.maxRetries, 10) || Infinity,
+        maxConcurrentWorkers = options
+            && Number.parseInt(options.maxConcurrentWorkers, 10)
+            || require('os').cpus().length,
         workers = workerFarm({
-            maxRetries: maxRetries
+            maxRetries: maxRetries,
+            maxConcurrentWorkers: maxConcurrentWorkers
         }, require.resolve('./src/webpackWorker')),
         done = closeFarm(workers, callback, +new Date());
 
