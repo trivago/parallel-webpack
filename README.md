@@ -2,8 +2,9 @@
 
 `parallel-webpack` allows you to run multiple webpack builds in parallel,
 spreading the work across your processors and thus helping to significantly speed
-up your build time. For us at [trivago](http://www.trivago.com) it has reduced
-the build time from 16 minutes to just 2 minutes - for 32 variants.
+up your build. For us at [trivago](http://www.trivago.com) it has reduced
+the build from 16 minutes to just 2 minutes - for 32 variants. That performance
+improvement naturally comes at the expense of utilizing all available CPU cores.
 
 ## Installation
 
@@ -47,14 +48,14 @@ well.
 ```javascript
 var createVariants = require('parallel-webpack').createVariants;
 
-// those options will be used as a base and will be the same for every variant
+// Those options will be the same for every variant.
 var baseOptions = {
     devtool: 'eval'
 };
 
-// this object defines the potential option variants
+// This object defines the potential option variants
 // the key of the object is used as the option name, its value must be an array
-// which contains all potential values of your build
+// which contains all potential values of your build.
 var variants = {
     minified: [true, false],
     debug: [true, false],
@@ -159,7 +160,7 @@ parallel-webpack --config=myapp.webpack.config.js
 
 ## Node.js API
 
-Just like Webpack, you can also use `parallel-webpack` as an API from node.js:
+Just like webpack, you can also use `parallel-webpack` as an API from node.js:
 
 ```javascript
 var run = require('parallel-webpack').run,
