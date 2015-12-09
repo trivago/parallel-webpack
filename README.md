@@ -158,6 +158,17 @@ specify its name using the `--config` parameter:
 parallel-webpack --config=myapp.webpack.config.js
 ```
 
+## Limiting parallelism
+
+Under certain circumstances you might not want `parallel-webpack` to use all of your
+available CPUs for building your assets. In those cases, you can specify the `parallel`,
+or `p` for short, option to tell `parallel-webpack` how many CPUs it may use.
+
+```
+parallel-webpack -p=2
+```
+
+
 ## Node.js API
 
 Just like webpack, you can also use `parallel-webpack` as an API from node.js:
@@ -167,6 +178,7 @@ var run = require('parallel-webpack').run,
     configPath = require.resolve('./webpack.config.js');
 run(configPath, {
     watch: false,
-    maxRetries: 1
+    maxRetries: 1,
+    maxConcurrentWorkers: 2 // use 2 workers
 });
 ```

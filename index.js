@@ -44,6 +44,7 @@ function closeFarm(workers, done, startTime) {
  * @param {Object} options
  * @param {Boolean} [options.watch=false] If `true`, Webpack will run in `watch-mode`.
  * @param {boolean} [options.maxRetries=Infinity] The maximum amount of retries on build error
+ * @param {Number} [options.maxConcurrentWorkers=require('os').cpus().length] The maximum number of parallel workers
  * @param {Function} [callback] A callback to be invoked once the build has been completed
  * @return {Promise} A Promise that is resolved once all builds have been created
  */
