@@ -18,7 +18,7 @@ function getWebpack() {
 }
 
 function getAppName(webpackConfig) {
-    return webpackConfig.output.filename.replace('[name]', webpackConfig.appName || webpackConfig.name);
+    return webpackConfig.name || webpackConfig.output.filename;
 }
 
 /**
