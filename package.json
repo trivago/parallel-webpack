@@ -1,7 +1,7 @@
 {
   "name": "parallel-webpack",
   "version": "1.0.0-beta.1",
-  "description": "Runs webpack configurations in parallel",
+  "description": "Builds multiple webpack configurations in parallel and allows you to easily create variants to those configurations.",
   "main": "index.js",
   "bin": {
     "parallel-webpack": "bin/run.js"

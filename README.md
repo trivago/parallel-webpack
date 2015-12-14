@@ -182,3 +182,23 @@ run(configPath, {
     maxConcurrentWorkers: 2 // use 2 workers
 });
 ```
+
+### createVariants
+
+#### createVariants(baseConfig: Object, variants: Object, configCallback: Function): Object[]
+
+Alters the given `baseConfig` with all possible `variants` and maps the result into
+a valid webpack configuration using the given `configCallback`.
+
+#### createVariants(variants: Object, configCallback: Function): Object[]
+
+Creates all possible variations as specified in the `variants` object and
+maps the result into a valid webpack configuration using the given `configCallback`.
+
+#### createVariants(baseConfig: Object, variants: Object): Object[]
+
+Alters the given `baseConfig` with all possible `variants` and returns it.
+
+#### createVariants(variants: Object): Object[]
+
+Creates all possible variations from the given `variants` and returns them as a flat array.

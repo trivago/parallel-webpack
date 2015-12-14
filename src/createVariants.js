@@ -31,7 +31,7 @@ module.exports = function createVariants(baseConfig, variants, configCallback) {
     }
 
     // Okay, so this looks a little bit messy but it really does make some sense.
-    // Essentially, for each CDN configuration, we want to create every
+    // Essentially, for each base configuration, we want to create every
     // possible combination of the configuration variants specified above.
     var transforms = _.map(_.keys(variants), function(key) {
             return function(config) {

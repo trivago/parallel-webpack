@@ -4,6 +4,11 @@
 
 var Promise = require('bluebird');
 
+/**
+ * Choose the most correct version of webpack, prefer locally installed version,
+ * fallback to the own dependency if there's none.
+ * @returns {*}
+ */
 function getWebpack() {
     try {
         return require(process.cwd() + '/node_modules/webpack');
@@ -13,7 +18,7 @@ function getWebpack() {
 }
 
 function getAppName(webpackConfig) {
-    return webpackConfig.output.filename.replace('[name]', webpackConfig.appName);
+    return webpackConfig.output.filename.replace('[name]', webpackConfig.appName || webpackConfig.name);
 }
 
 /**
@@ -34,7 +39,7 @@ module.exports = function(configuratorFileName, watch, index, done) {
         var webpack = getWebpack(),
             finishedCallback = function(err, stats) {
                 if(err) {
-                    console.error('[WEBPACK] Error building %s', webpackConfig.output.filename);
+                    console.error('[WEBPACK] Error building %s', getAppName(webpackConfig));
                     console.log(err);
                     return;
                 }
@@ -44,20 +49,15 @@ module.exports = function(configuratorFileName, watch, index, done) {
                 console.log('[WEBPACK] Finished building %s', getAppName(webpackConfig));
                 if(!watch) done();
             };
-        if(!webpackConfig.plugins) {
-            webpackConfig.plugins = [];
-        }
-        webpackConfig.plugins.push(function() {
-            this.plugin('done', function(stats) {
-                if (stats.compilation.errors && stats.compilation.errors.length) {
-                    console.log(stats.compilation.errors);
-                    process.exit(1);
-                }
-            });
-        });
         console.log('[WEBPACK] Started %s %s', watch ? 'watching' : 'building', getAppName(webpackConfig));
         var compiler = webpack(webpackConfig),
             watcher;
+        compiler.plugin('done', function(stats) {
+            if (stats.compilation.errors && stats.compilation.errors.length) {
+                console.log(stats.compilation.errors);
+                process.exit(1);
+            }
+        });
         if(watch || webpack.watch) {
             watcher = compiler.watch({}, finishedCallback);
         } else {
