@@ -1,6 +1,6 @@
 {
   "name": "parallel-webpack",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.1",
   "description": "Runs webpack configurations in parallel",
   "main": "index.js",
   "bin": {
