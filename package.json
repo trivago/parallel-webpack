@@ -1,6 +1,6 @@
 {
   "name": "parallel-webpack",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0",
   "description": "Builds multiple webpack configurations in parallel and allows you to easily create variants to those configurations.",
   "main": "index.js",
   "bin": {
@@ -16,11 +16,11 @@
   "author": "Patrick Gotthardt <patrick.gotthardt@trivago.com>",
   "license": "BSD-3-Clause",
   "repository": {
-      "type": "git",
-      "url": "https://github.com/trivago/parallel-webpack"
+    "type": "git",
+    "url": "https://github.com/trivago/parallel-webpack"
   },
   "bugs": {
-      "url": "https://github.com/trivago/parallel-webpack/issues"
+    "url": "https://github.com/trivago/parallel-webpack/issues"
   },
   "dependencies": {
     "bluebird": "^3.0.6",
