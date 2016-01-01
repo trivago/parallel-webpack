@@ -12,6 +12,8 @@ var run = require('../index').run,
             'max-retries': Infinity,
             config: 'webpack.config.js',
             'parallel': require('os').cpus().length,
+            json: false,
+            colors: require('supports-color')
         },
         alias: {
             'm': 'max-retries',
@@ -29,7 +31,22 @@ if(argv.version) {
         run(configPath, {
             watch: argv.watch,
             maxRetries: Number.parseInt(argv['max-retries'], 10),
-            maxConcurrentWorkers: Number.parseInt(argv['parallel'], 10)
+            maxConcurrentWorkers: Number.parseInt(argv['parallel'], 10),
+            bail: argv.bail,
+            json: argv.json,
+            modulesSort: argv['sort-modules-by'],
+            chunksSort: argv['sort-chunks-by'],
+            assetsSort: argv['sort-assets-by'],
+            exclude: argv['display-exclude'],
+            colors: argv['colors']
+        }).then(function(stats) {
+            if(argv.json && stats) {
+                process.stdout.write(JSON.stringify(stats.map(function(stat) {
+                    return JSON.parse(stat);
+                }), null, 2) + "\n");
+            }
+        }).catch(function(err) {
+            console.error(err);
         });
     } catch (e) {
         console.error('[WEBPACK] Could not load configuration %s', process.cwd() + '/' + argv.config);

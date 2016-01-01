@@ -3,38 +3,57 @@ var workerFarm = require('worker-farm'),
     _ = require('lodash');
 
 function runWorker(configFileName, watch, index, workers) {
-    return new Promise(function(resolve) {
-        workers(configFileName, watch, index, resolve);
+    return new Promise(function(resolve, reject) {
+        workers(configFileName, watch, index, function(err, result) {
+            if(err) {
+                reject(err);
+            } else {
+                resolve(result);
+            }
+        });
     });
 }
 
-function startSingleConfigWorker(configPath, watch, workers) {
-    console.log('[WEBPACK] Building 1 configuration');
-    return runWorker(configPath, watch, 0, workers);
+function isSilent(options) {
+    return options && !options.json;
 }
 
-function startMultiConfigFarm(config, configPath, watch, workers) {
-    console.log('[WEBPACK] Building %s targets in parallel', config.length);
+function startSingleConfigWorker(configPath, options, workers) {
+    if(isSilent(options)) {
+        console.log('[WEBPACK] Building 1 configuration');
+    }
+    return runWorker(configPath, options, 0, workers).then(function(stats) {
+        return [stats];
+    });
+}
+
+function startMultiConfigFarm(config, configPath, options, workers) {
+    if(isSilent(options)) {
+        console.log('[WEBPACK] Building %s targets in parallel', config.length);
+    }
     return Promise.all(_.map(config, function(c, i) {
-        return runWorker(configPath, watch, i, workers);
+        return runWorker(configPath, options, i, workers);
     }));
 }
 
-function startFarm(config, configPath, watch, workers) {
+function startFarm(config, configPath, options, workers) {
     if(!_.isArray(config)) {
-        return startSingleConfigWorker(configPath, watch, workers);
+        return startSingleConfigWorker(configPath, options, workers);
     } else {
-        return startMultiConfigFarm(config, configPath, watch, workers);
+        return startMultiConfigFarm(config, configPath, options, workers);
     }
 }
 
-function closeFarm(workers, done, startTime) {
-    return function() {
+function closeFarm(workers, options, done, startTime) {
+    return function(stats) {
         workerFarm.end(workers);
-        console.log('[WEBPACK] Finished build after %s seconds', (new Date().getTime() - startTime) / 1000);
-        if (done) {
-            done();
+        if(isSilent(options)) {
+            console.log('[WEBPACK] Finished build after %s seconds', (new Date().getTime() - startTime) / 1000);
         }
+        if (done) {
+            done(stats);
+        }
+        return stats;
     }
 }
 
@@ -57,8 +76,7 @@ function run(configPath, options, callback) {
         return Promise.reject(e);
     }
 
-    var watch = options && !!options.watch,
-        maxRetries = options && Number.parseInt(options.maxRetries, 10) || Infinity,
+    var maxRetries = options && Number.parseInt(options.maxRetries, 10) || Infinity,
         maxConcurrentWorkers = options
             && Number.parseInt(options.maxConcurrentWorkers, 10)
             || require('os').cpus().length,
@@ -66,14 +84,14 @@ function run(configPath, options, callback) {
             maxRetries: maxRetries,
             maxConcurrentWorkers: maxConcurrentWorkers
         }, require.resolve('./src/webpackWorker')),
-        done = closeFarm(workers, callback, +new Date());
+        done = closeFarm(workers, options, callback, +new Date());
 
     process.on('SIGINT', function() {
         console.log('[WEBPACK] Forcefully shutting down');
         done();
     });
 
-    return startFarm(config, configPath, watch, workers).then(done, done);
+    return startFarm(config, configPath, options || {}, workers).then(done, done);
 }
 
 module.exports = {
