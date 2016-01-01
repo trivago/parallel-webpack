@@ -48,9 +48,10 @@ well.
 ```javascript
 var createVariants = require('parallel-webpack').createVariants;
 
-// Those options will be the same for every variant.
+// Those options will be mixed into every variant
+// and passed to the `createConfig` callback.
 var baseOptions = {
-    devtool: 'eval'
+    preferredDevTool: process.env.DEVTOOL || 'eval'
 };
 
 // This object defines the potential option variants
@@ -80,6 +81,7 @@ function createConfig(options) {
     }
     return {
         entry: './index.js',
+        devtool: options.preferredDevTool,
         output: {
             path: './dist/',
             filename: 'MyLib.' +
