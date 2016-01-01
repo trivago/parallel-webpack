@@ -91,7 +91,10 @@ function run(configPath, options, callback) {
         done();
     });
 
-    return startFarm(config, configPath, options || {}, workers).then(done, done);
+    return startFarm(config, configPath, options || {}, workers)
+        .then(done, function(err) {
+            throw done(err);
+        });
 }
 
 module.exports = {

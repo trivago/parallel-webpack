@@ -87,7 +87,7 @@ module.exports = function(configuratorFileName, options, index, done) {
                 if(!silent) {
                     console.log(stats.compilation.errors);
                 }
-                done(stats);
+                done(JSON.stringify(stats.toJson(outputOptions), null, 2));
                 process.exit(1);
             }
         });

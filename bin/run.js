@@ -51,5 +51,6 @@ if(argv.version) {
     } catch (e) {
         console.error('[WEBPACK] Could not load configuration %s', process.cwd() + '/' + argv.config);
         console.error(e);
+        process.exit(1);
     }
 }
