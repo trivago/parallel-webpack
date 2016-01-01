@@ -46,7 +46,9 @@ function getOutputOptions(webpackConfig, options) {
  * Calls the done callback once it has finished its work.
  *
  * @param {string} configuratorFileName The app configuration filename
- * @param {boolean} watch If `true`, then the webpack watcher is being run; if `false`, runs only ones
+ * @param {Object} options The build options
+ * @param {boolean} options.watch If `true`, then the webpack watcher is being run; if `false`, runs only ones
+ * @param {boolean} options.json If `true`, then the webpack watcher will only report the result as JSON but not produce any other output
  * @param {Number} index The configuration index
  * @param {Function} done The callback that should be invoked once this worker has finished the build.
  */
