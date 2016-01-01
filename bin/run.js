@@ -13,7 +13,8 @@ var run = require('../index').run,
             config: 'webpack.config.js',
             'parallel': require('os').cpus().length,
             json: false,
-            colors: require('supports-color')
+            colors: require('supports-color'),
+            bail: true
         },
         alias: {
             'm': 'max-retries',

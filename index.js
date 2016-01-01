@@ -2,45 +2,48 @@ var workerFarm = require('worker-farm'),
     Promise = require('bluebird'),
     _ = require('lodash');
 
-function runWorker(configFileName, watch, index, workers) {
-    return new Promise(function(resolve, reject) {
-        workers(configFileName, watch, index, function(err, result) {
-            if(err) {
-                reject(err);
-            } else {
-                resolve(result);
-            }
-        });
-    });
-}
-
 function isSilent(options) {
     return options && !options.json;
 }
 
-function startSingleConfigWorker(configPath, options, workers) {
+function startSingleConfigWorker(configPath, options, runWorker) {
     if(isSilent(options)) {
         console.log('[WEBPACK] Building 1 configuration');
     }
-    return runWorker(configPath, options, 0, workers).then(function(stats) {
+    return runWorker(configPath, options, 0).then(function(stats) {
         return [stats];
     });
 }
 
-function startMultiConfigFarm(config, configPath, options, workers) {
+function startMultiConfigFarm(config, configPath, options, runWorker) {
     if(isSilent(options)) {
         console.log('[WEBPACK] Building %s targets in parallel', config.length);
     }
-    return Promise.all(_.map(config, function(c, i) {
-        return runWorker(configPath, options, i, workers);
-    }));
+    var builds = _.map(config, function (c, i) {
+        return runWorker(configPath, options, i);
+    });
+    if(options.bail) {
+        return Promise.all(builds);
+    } else {
+        return Promise.all(builds.map(function(build) {
+            return build.reflect();
+        })).then(function(results) {
+            return Promise.all(results.map(function(buildInspection) {
+                if(buildInspection.isFulfilled) {
+                    return buildInspection.value();
+                } else {
+                    return Promise.reject(buildInspection.reason());
+                }
+            }));
+        });
+    }
 }
 
-function startFarm(config, configPath, options, workers) {
+function startFarm(config, configPath, options, runWorker) {
     if(!_.isArray(config)) {
-        return startSingleConfigWorker(configPath, options, workers);
+        return startSingleConfigWorker(configPath, options, runWorker);
     } else {
-        return startMultiConfigFarm(config, configPath, options, workers);
+        return startMultiConfigFarm(config, configPath, options, runWorker);
     }
 }
 
@@ -91,10 +94,14 @@ function run(configPath, options, callback) {
         done();
     });
 
-    return startFarm(config, configPath, options || {}, workers)
-        .then(done, function(err) {
-            throw done(err);
-        });
+    return startFarm(
+        config,
+        configPath,
+        options || {},
+        Promise.promisify(workers)
+    ).then(done, function(err) {
+        throw done(err);
+    });
 }
 
 module.exports = {
