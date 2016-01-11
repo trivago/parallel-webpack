@@ -10,7 +10,7 @@ function startSingleConfigWorker(configPath, options, runWorker) {
     if(isSilent(options)) {
         console.log('[WEBPACK] Building 1 configuration');
     }
-    return runWorker(configPath, options, 0).then(function(stats) {
+    return runWorker(configPath, options, 0, 1).then(function(stats) {
         return [stats];
     });
 }
@@ -19,8 +19,8 @@ function startMultiConfigFarm(config, configPath, options, runWorker) {
     if(isSilent(options)) {
         console.log('[WEBPACK] Building %s targets in parallel', config.length);
     }
-    var builds = _.map(config, function (c, i) {
-        return runWorker(configPath, options, i);
+    var builds = config.map(function (c, i) {
+        return runWorker(configPath, options, i, config.length);
     });
     if(options.bail) {
         return Promise.all(builds);
@@ -71,9 +71,16 @@ function closeFarm(workers, options, done, startTime) {
  * @return {Promise} A Promise that is resolved once all builds have been created
  */
 function run(configPath, options, callback) {
-    var config;
+    var config,
+        argvBackup = process.argv;
+    if(!options.argv) {
+        options.argv = [];
+    }
+    options.argv = ['node', 'parallel-webpack'].concat(options.argv);
     try {
+        process.argv = options.argv;
         config = require(configPath);
+        process.argv = argvBackup;
     } catch(e) {
         console.error('Could not load configuration file %s', configPath);
         return Promise.reject(e);

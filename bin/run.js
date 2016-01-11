@@ -39,7 +39,8 @@ if(argv.version) {
             chunksSort: argv['sort-chunks-by'],
             assetsSort: argv['sort-assets-by'],
             exclude: argv['display-exclude'],
-            colors: argv['colors']
+            colors: argv['colors'],
+            argv: argv['--']
         }).then(function(stats) {
             if(argv.json && stats) {
                 process.stdout.write(JSON.stringify(stats.map(function(stat) {
@@ -48,6 +49,8 @@ if(argv.version) {
             }
         }).catch(function(err) {
             console.error(err);
+        }).then(function() {
+            process.exit(0);
         });
     } catch (e) {
         console.error('[WEBPACK] Could not load configuration %s', process.cwd() + '/' + argv.config);

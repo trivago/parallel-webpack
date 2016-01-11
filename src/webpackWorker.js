@@ -52,10 +52,24 @@ function getOutputOptions(webpackConfig, options) {
  * @param {Number} index The configuration index
  * @param {Function} done The callback that should be invoked once this worker has finished the build.
  */
-module.exports = function(configuratorFileName, options, index, done) {
+module.exports = function(configuratorFileName, options, index, expectedConfigLength, done) {
+    if(options.argv) {
+        process.argv = options.argv;
+    }
     var config = require(configuratorFileName),
         watch = !!options.watch,
         silent = !!options.json;
+    if(expectedConfigLength !== 1 && !Array.isArray(config)
+            || Array.isArray(config) && config.length !== expectedConfigLength) {
+        if(config.length !== expectedConfigLength) {
+            var errorMessage =                 '[WEBPACK] There is a difference between the amount of the'
+                + ' provided configs. Maybe you where expecting command line'
+                + ' arguments to be passed to your webpack.config.js. If so,'
+                + " you'll need to separate them with a -- from the parallel-webpack options.";
+            console.error(errorMessage);
+            return Promise.reject(errorMessage);
+        }
+    }
     if(Array.isArray(config)) {
         config = config[index];
     }
