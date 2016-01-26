@@ -2,7 +2,8 @@
  * Created by pgotthardt on 07/12/15.
  */
 
-var Promise = require('bluebird');
+var Promise = require('bluebird'),
+    chalk = require('chalk');
 
 /**
  * Choose the most correct version of webpack, prefer locally installed version,
@@ -56,6 +57,7 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
     if(options.argv) {
         process.argv = options.argv;
     }
+    chalk.enabled = options.colors;
     var config = require(configuratorFileName),
         watch = !!options.watch,
         silent = !!options.json;
@@ -75,38 +77,43 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
     }
     Promise.resolve(config).then(function(webpackConfig) {
         var webpack = getWebpack(),
+            startTime = +new Date(),
             outputOptions = getOutputOptions(webpackConfig, options),
             finishedCallback = function(err, stats) {
                 if(err) {
-                    if(!silent) {
-                        console.error('[WEBPACK] Error building %s', getAppName(webpackConfig));
-                        console.log(err);
-                    }
+                    console.error('%s fatal error occured', chalk.red('[WEBPACK]'));
+                    console.error(err);
                     done(err);
-                    return;
+                }
+                if(stats.compilation.errors && stats.compilation.errors.length) {
+                    var message = chalk.red('[WEBPACK]') + ' Errors building ' + chalk.yellow(getAppName(webpackConfig)) + "\n"
+                        + stats.compilation.errors.map(function(error) {
+                            return error.message;
+                        }).join("\n");
+                    if(watch) {
+                        console.log(message);
+                    } else {
+                        return done({
+                            message: message,
+                            stats: JSON.stringify(stats.toJson(outputOptions), null, 2)
+                        });
+                    }
                 }
                 if(!silent) {
-                    console.log(stats.toString(outputOptions));
-                    console.log('[WEBPACK] Finished building %s', getAppName(webpackConfig));
+                    if(options.stats) {
+                        console.log(stats.toString(outputOptions));
+                    }
+                    console.log('%s Finished building %s within %s seconds', chalk.blue('[WEBPACK]'), chalk.yellow(getAppName(webpackConfig)), chalk.blue((+new Date() - startTime) / 1000));
                 }
                 if(!watch) {
-                    done(null, JSON.stringify(stats.toJson(outputOptions), null, 2));
+                    done(null, options.stats ? JSON.stringify(stats.toJson(outputOptions), null, 2) : '');
                 }
             };
         if(!silent) {
-            console.log('[WEBPACK] Started %s %s', watch ? 'watching' : 'building', getAppName(webpackConfig));
+            console.log('%s Started %s %s', chalk.blue('[WEBPACK]'), watch ? 'watching' : 'building', chalk.yellow(getAppName(webpackConfig)));
         }
         var compiler = webpack(webpackConfig),
             watcher;
-        compiler.plugin('done', function(stats) {
-            if (stats.compilation.errors && stats.compilation.errors.length) {
-                if(!silent) {
-                    console.log(stats.compilation.errors);
-                }
-                done(JSON.stringify(stats.toJson(outputOptions), null, 2));
-                process.exit(1);
-            }
-        });
         if(watch || webpack.watch) {
             watcher = compiler.watch({}, finishedCallback);
         } else {
@@ -114,10 +121,11 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
         }
 
         process.on('SIGINT', function() {
-            if(!silent) {
-                console.log('[WEBPACK] Forcefully shutting down %s', getAppName(webpackConfig));
-            }
             if(watcher) watcher.close(done);
+            done({
+                message: chalk.red('[WEBPACK]') + ' Forcefully shut down ' + chalk.yellow(getAppName(webpackConfig))
+            });
+            process.exit(0);
         });
     });
 };

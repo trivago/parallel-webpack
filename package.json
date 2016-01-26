@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "bluebird": "^3.0.6",
+    "chalk": "^1.1.1",
     "lodash": "^3.10.1",
     "minimist": "^1.2.0",
     "supports-color": "^3.1.2",

@@ -1,5 +1,6 @@
 var workerFarm = require('worker-farm'),
     Promise = require('bluebird'),
+    chalk = require('chalk'),
     _ = require('lodash');
 
 function isSilent(options) {
@@ -8,16 +9,22 @@ function isSilent(options) {
 
 function startSingleConfigWorker(configPath, options, runWorker) {
     if(isSilent(options)) {
-        console.log('[WEBPACK] Building 1 configuration');
+        process.stdout.write(chalk.blue('[WEBPACK]') + ' Building ' + chalk.yellow('1') + ' configuration' + "\n");
     }
-    return runWorker(configPath, options, 0, 1).then(function(stats) {
-        return [stats];
+    var worker = require('./src/webpackWorker');
+    return new Promise(function(resolve, reject) {
+        worker(configPath, options, 0, 1, function(err, stats) {
+            if(err) {
+                return reject(err);
+            }
+            resolve([stats]);
+        });
     });
 }
 
 function startMultiConfigFarm(config, configPath, options, runWorker) {
     if(isSilent(options)) {
-        console.log('[WEBPACK] Building %s targets in parallel', config.length);
+        process.stdout.write(chalk.blue('[WEBPACK]') + ' Building ' + chalk.yellow(config.length) + ' targets in parallel' + "\n");
     }
     var builds = config.map(function (c, i) {
         return runWorker(configPath, options, i, config.length);
@@ -40,6 +47,11 @@ function startMultiConfigFarm(config, configPath, options, runWorker) {
 }
 
 function startFarm(config, configPath, options, runWorker) {
+    // special handling for cases where only one config is exported as array
+    // unpack and treat as single config
+    if(_.isArray(config) && config.length === 1) {
+        config = config[0];
+    }
     if(!_.isArray(config)) {
         return startSingleConfigWorker(configPath, options, runWorker);
     } else {
@@ -48,15 +60,35 @@ function startFarm(config, configPath, options, runWorker) {
 }
 
 function closeFarm(workers, options, done, startTime) {
-    return function(stats) {
+    return function(err, stats) {
         workerFarm.end(workers);
         if(isSilent(options)) {
-            console.log('[WEBPACK] Finished build after %s seconds', (new Date().getTime() - startTime) / 1000);
+            if(err) {
+                console.log('%s Build failed after %s seconds', chalk.red('[WEBPACK]'), chalk.blue((new Date().getTime() - startTime) / 1000));
+            } else {
+                console.log('%s Finished build after %s seconds', chalk.blue('[WEBPACK]'), chalk.blue((new Date().getTime() - startTime) / 1000));
+            }
         }
         if (done) {
-            done(stats);
+            done(err, stats);
+        }
+        if(err) {
+            throw err;
         }
         return stats;
+    }
+}
+
+function promisify(workers) {
+    return function(configPath, options, i, configLength) {
+        return new Promise(function(resolve, reject) {
+            workers(configPath, options, i, configLength, function(err, res) {
+                if(err) {
+                    return reject(err);
+                }
+                resolve(res);
+            });
+        });
     }
 }
 
@@ -82,8 +114,10 @@ function run(configPath, options, callback) {
         config = require(configPath);
         process.argv = argvBackup;
     } catch(e) {
-        console.error('Could not load configuration file %s', configPath);
-        return Promise.reject(e);
+        throw {
+            message: chalk.red('[WEBPACK]') + ' Could not load configuration file ' + chalk.underline(configPath),
+            error: e
+        };
     }
 
     var maxRetries = options && Number.parseInt(options.maxRetries, 10) || Infinity,
@@ -97,7 +131,7 @@ function run(configPath, options, callback) {
         done = closeFarm(workers, options, callback, +new Date());
 
     process.on('SIGINT', function() {
-        console.log('[WEBPACK] Forcefully shutting down');
+        console.log(chalk.red('[WEBPACK]') + ' Forcefully shutting down');
         done();
     });
 
@@ -105,8 +139,10 @@ function run(configPath, options, callback) {
         config,
         configPath,
         options || {},
-        Promise.promisify(workers)
-    ).then(done, function(err) {
+        promisify(workers)
+    ).then(function(err, res) {
+        return done(null, res);
+    }, function(err) {
         throw done(err);
     });
 }
