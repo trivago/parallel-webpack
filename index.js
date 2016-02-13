@@ -120,9 +120,9 @@ function run(configPath, options, callback) {
         };
     }
 
-    var maxRetries = options && Number.parseInt(options.maxRetries, 10) || Infinity,
+    var maxRetries = options && parseInt(options.maxRetries, 10) || Infinity,
         maxConcurrentWorkers = options
-            && Number.parseInt(options.maxConcurrentWorkers, 10)
+            && parseInt(options.maxConcurrentWorkers, 10)
             || require('os').cpus().length,
         workers = workerFarm({
             maxRetries: maxRetries,

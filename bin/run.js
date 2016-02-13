@@ -34,8 +34,8 @@ if(argv.version) {
         configPath = path.resolve(argv.config);
         run(configPath, {
             watch: argv.watch,
-            maxRetries: Number.parseInt(argv['max-retries'], 10),
-            maxConcurrentWorkers: Number.parseInt(argv['parallel'], 10),
+            maxRetries: parseInt(argv['max-retries'], 10),
+            maxConcurrentWorkers: parseInt(argv['parallel'], 10),
             bail: argv.bail,
             json: argv.json,
             modulesSort: argv['sort-modules-by'],
