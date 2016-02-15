@@ -77,7 +77,6 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
     }
     Promise.resolve(config).then(function(webpackConfig) {
         var webpack = getWebpack(),
-            startTime = +new Date(),
             outputOptions = getOutputOptions(webpackConfig, options),
             finishedCallback = function(err, stats) {
                 if(err) {
@@ -103,7 +102,7 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
                     if(options.stats) {
                         console.log(stats.toString(outputOptions));
                     }
-                    console.log('%s Finished building %s within %s seconds', chalk.blue('[WEBPACK]'), chalk.yellow(getAppName(webpackConfig)), chalk.blue((+new Date() - startTime) / 1000));
+                    console.log('%s Finished building %s within %s seconds', chalk.blue('[WEBPACK]'), chalk.yellow(getAppName(webpackConfig)), chalk.blue((stats.endTime - stats.startTime) / 1000));
                 }
                 if(!watch) {
                     done(null, options.stats ? JSON.stringify(stats.toJson(outputOptions), null, 2) : '');
