@@ -1,7 +1,6 @@
 /**
  * Created by pgotthardt on 07/12/15.
  */
-var _ = require('lodash');
 
 /**
  * Creates configuration variants.
@@ -15,7 +14,7 @@ var _ = require('lodash');
 module.exports = function createVariants(baseConfig, variants, configCallback) {
     if(arguments.length < 3) {
         if(arguments.length === 2) {
-            if(_.isFunction(variants)) {
+            if(typeof variants === 'function') {
                 // createVariants(variants: Object, configCallback: Function)
                 configCallback = variants;
                 variants = baseConfig;

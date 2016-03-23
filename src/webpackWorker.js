@@ -50,7 +50,8 @@ function getOutputOptions(webpackConfig, options) {
  * @param {Object} options The build options
  * @param {boolean} options.watch If `true`, then the webpack watcher is being run; if `false`, runs only ones
  * @param {boolean} options.json If `true`, then the webpack watcher will only report the result as JSON but not produce any other output
- * @param {Number} index The configuration index
+ * @param {number} index The configuration index
+ * @param {number} expectedConfigLength
  * @param {Function} done The callback that should be invoked once this worker has finished the build.
  */
 module.exports = function(configuratorFileName, options, index, expectedConfigLength, done) {

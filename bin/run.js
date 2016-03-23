@@ -52,14 +52,7 @@ if(argv.version) {
                 }), null, 2) + "\n");
             }
         }).catch(function(err) {
-            if(err.message) {
-                process.stdout.write(err.message + "\n");
-                if(err.error) {
-                    console.error(err.error);
-                }
-            } else {
-                console.error(err);
-            }
+            console.log(err.message);
             process.exit(1);
         });
     } catch (e) {
