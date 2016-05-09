@@ -56,7 +56,7 @@ function run(configPath, options, callback) {
     if(!options.argv) {
         options.argv = [];
     }
-    options.argv = options.argv.unshift(process.execPath, 'parallel-webpack');
+    options.argv.unshift(process.execPath, 'parallel-webpack');
     try {
         process.argv = options.argv;
         config = require(configPath);
