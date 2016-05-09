@@ -216,6 +216,7 @@ var run = require('parallel-webpack').run,
 run(configPath, {
     watch: false,
     maxRetries: 1,
+    stats: true, // defaults to false
     maxConcurrentWorkers: 2 // use 2 workers
 });
 ```

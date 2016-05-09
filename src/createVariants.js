@@ -1,7 +1,8 @@
 /**
  * Created by pgotthardt on 07/12/15.
  */
-var _ = require('lodash');
+var assign = require('lodash.assign');
+var flatten = require('lodash.flatten');
 
 /**
  * Creates configuration variants.
@@ -15,7 +16,7 @@ var _ = require('lodash');
 module.exports = function createVariants(baseConfig, variants, configCallback) {
     if(arguments.length < 3) {
         if(arguments.length === 2) {
-            if(_.isFunction(variants)) {
+            if(typeof variants === 'function') {
                 // createVariants(variants: Object, configCallback: Function)
                 configCallback = variants;
                 variants = baseConfig;
@@ -33,19 +34,19 @@ module.exports = function createVariants(baseConfig, variants, configCallback) {
     // Okay, so this looks a little bit messy but it really does make some sense.
     // Essentially, for each base configuration, we want to create every
     // possible combination of the configuration variants specified above.
-    var transforms = _.map(_.keys(variants), function(key) {
+    var transforms = Object.keys(variants).map(function(key) {
             return function(config) {
                 return variants[key].map(function(value) {
-                    var result = _.assign({}, config);
+                    var result = assign({}, config);
                     result[key] = value;
                     return result;
                 });
             };
         }),
-        configs = _.reduce(transforms, function(options, transform) {
-            return _.flatten(_.map(options, transform));
+        configs = transforms.reduce(function(options, transform) {
+            return flatten(options.map(transform));
         }, [baseConfig]);
 
 
-    return configCallback && _.map(configs, configCallback) || configs;
+    return configCallback && configs.map(configCallback) || configs;
 };
