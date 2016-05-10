@@ -6,12 +6,14 @@
 var run = require('../index').run,
     path = require('path'),
     chalk = require('chalk'),
+    findConfigFile = require('../src/findConfigFile'),
     argv = require('minimist')(process.argv.slice(2), {
         '--': true,
         default: {
             watch: false,
             'max-retries': Infinity,
-            config: 'webpack.config.js',
+            // leave off file extension so that we can find the most appropriate one
+            config: 'webpack.config',
             'parallel': require('os').cpus().length,
             json: false,
             colors: require('supports-color'),
@@ -31,7 +33,8 @@ if(argv.version) {
 } else {
     try {
         chalk.enabled = argv.colors;
-        configPath = path.resolve(argv.config);
+        configPath = findConfigFile(path.resolve(argv.config));
+        
         run(configPath, {
             watch: argv.watch,
             maxRetries: parseInt(argv['max-retries'], 10),

@@ -1,7 +1,8 @@
 var workerFarm = require('worker-farm'),
     Promise = require('bluebird'),
     chalk = require('chalk'),
-    pluralize = require('pluralize');
+    pluralize = require('pluralize'),
+    loadConfigurationFile = require('./src/loadConfigurationFile');
 
 function notSilent(options) {
     return !options.json;
@@ -59,11 +60,14 @@ function run(configPath, options, callback) {
     options.argv.unshift(process.execPath, 'parallel-webpack');
     try {
         process.argv = options.argv;
-        config = require(configPath);
+        config = loadConfigurationFile(configPath);
         process.argv = argvBackup;
     } catch(e) {
         process.argv = argvBackup;
-        return Promise.reject(new Error(chalk.red('[WEBPACK]') + ' Could not load configuration file ' + chalk.underline(configPath)));
+        return Promise.reject(new Error(
+            chalk.red('[WEBPACK]') + ' Could not load configuration file ' + chalk.underline(configPath) + "\n"
+            + e
+        ));
     }
 
     var maxRetries = parseInt(options.maxRetries, 10) || 0,

@@ -3,7 +3,8 @@
  */
 
 var Promise = require('bluebird'),
-    chalk = require('chalk');
+    chalk = require('chalk'),
+    loadConfigurationFile = require('./loadConfigurationFile');
 
 /**
  * Choose the most correct version of webpack, prefer locally installed version,
@@ -59,7 +60,7 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
         process.argv = options.argv;
     }
     chalk.enabled = options.colors;
-    var config = require(configuratorFileName),
+    var config = loadConfigurationFile(configuratorFileName),
         watch = !!options.watch,
         silent = !!options.json;
     if(expectedConfigLength !== 1 && !Array.isArray(config)
