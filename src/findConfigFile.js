@@ -1,15 +1,34 @@
 var potentialExtensions = [''].concat(Object.keys(require('interpret').jsVariants)),
-    accessSync = require('fs').accessSync;
+    fs = require('fs');
+
+function existsWithAccess(path) {
+    try {
+        fs.accessSync(path);
+        return true;
+    } catch(ignore) {
+        return false;
+    }
+}
+
+function exists(path) {
+    if(fs.accessSync) {
+        return existsWithAccess(path);
+    } else {
+        try {
+            var stats = fs.statSync(path);
+            return stats.isFile();
+        } catch(ignore) {
+            return false;
+        }
+    }
+}
 
 module.exports = function(configPath) {
     for(var i = 0, len = potentialExtensions.length; i < len; i++) {
         var ext = potentialExtensions[i];
-        try {
-            accessSync(configPath + ext);
+        if(exists(configPath + ext)) {
             // file exists, use that extension
             return configPath + ext;
-        } catch(ignore) {
-            // just means the file doesn't exist and we look at the next one
         }
     }
     
