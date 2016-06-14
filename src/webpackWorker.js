@@ -20,7 +20,15 @@ function getWebpack() {
 }
 
 function getAppName(webpackConfig) {
-    return webpackConfig.name || webpackConfig.output.filename;
+    var appName = webpackConfig.name || webpackConfig.output.filename;
+    if(~appName.indexOf('[name]') && typeof webpackConfig.entry === 'object') {
+        var entryNames = Object.keys(webpackConfig.entry);
+        if(entryNames.length === 1) {
+            // we can only replace [name] with the entry point if there is only one entry point
+            appName = appName.replace(/\[name]/, entryNames[0]);
+        }
+    }
+    return appName;
 }
 
 function getOutputOptions(webpackConfig, options) {
