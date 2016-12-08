@@ -86,13 +86,25 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
         config = config[index];
     }
     Promise.resolve(config).then(function(webpackConfig) {
-        var webpack = getWebpack(),
+        var watcher,
+            webpack = getWebpack(),
             outputOptions = getOutputOptions(webpackConfig, options),
+            shutdownCallback = function() {
+                if(watcher) {
+                    watcher.close(done);
+                } else {
+                    done({
+                        message: chalk.red('[WEBPACK]') + ' Forcefully shut down ' + chalk.yellow(getAppName(webpackConfig))
+                    });
+                }
+                process.exit(0);
+            },
             finishedCallback = function(err, stats) {
                 if(err) {
                     console.error('%s fatal error occured', chalk.red('[WEBPACK]'));
                     console.error(err);
-                    done(err);
+                    process.removeListener('SIGINT', shutdownCallback);
+                    return done(err);
                 }
                 if(stats.compilation.errors && stats.compilation.errors.length) {
                     var message = chalk.red('[WEBPACK]') + ' Errors building ' + chalk.yellow(getAppName(webpackConfig)) + "\n"
@@ -102,6 +114,7 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
                     if(watch) {
                         console.log(message);
                     } else {
+                        process.removeListener('SIGINT', shutdownCallback);
                         return done({
                             message: message,
                             stats: JSON.stringify(stats.toJson(outputOptions), null, 2)
@@ -118,26 +131,20 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
                     console.log('%s Finished building %s within %s seconds', chalk.blue('[WEBPACK' + timeStamp + ']'), chalk.yellow(getAppName(webpackConfig)), chalk.blue((stats.endTime - stats.startTime) / 1000));
                 }
                 if(!watch) {
+                    process.removeListener('SIGINT', shutdownCallback);
                     done(null, options.stats ? JSON.stringify(stats.toJson(outputOptions), null, 2) : '');
                 }
             };
         if(!silent) {
             console.log('%s Started %s %s', chalk.blue('[WEBPACK]'), watch ? 'watching' : 'building', chalk.yellow(getAppName(webpackConfig)));
         }
-        var compiler = webpack(webpackConfig),
-            watcher;
+        var compiler = webpack(webpackConfig);
         if(watch || webpack.watch) {
             watcher = compiler.watch({}, finishedCallback);
         } else {
             compiler.run(finishedCallback);
         }
 
-        process.on('SIGINT', function() {
-            if(watcher) watcher.close(done);
-            done({
-                message: chalk.red('[WEBPACK]') + ' Forcefully shut down ' + chalk.yellow(getAppName(webpackConfig))
-            });
-            process.exit(0);
-        });
+        process.on('SIGINT', shutdownCallback);
     });
 };
