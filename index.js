@@ -78,12 +78,14 @@ function run(configPath, options, callback) {
             maxConcurrentWorkers: maxConcurrentWorkers
         }, require.resolve('./src/webpackWorker'));
 
-    process.on('SIGINT', function() {
+    var shutdownCallback = function() {
         if (notSilent(options)) {
             console.log(chalk.red('[WEBPACK]') + ' Forcefully shutting down');
         }
         workerFarm.end(workers);
-    });
+    };
+
+    process.on('SIGINT', shutdownCallback);
 
     var startTime = Date.now();
     return startFarm(
@@ -107,6 +109,7 @@ function run(configPath, options, callback) {
             return results;
         }
     }).finally(function () {
+        process.removeListener('SIGINT', shutdownCallback);
         workerFarm.end(workers);
     }).asCallback(callback);
 }
@@ -115,4 +118,3 @@ module.exports = {
     createVariants: require('./src/createVariants'),
     run: run
 };
-
