@@ -68,7 +68,7 @@ function run(configPath, options, callback) {
     var config,
         argvBackup = process.argv,
         farmOptions = assign({}, options);
-        options = options || {};
+    options = options || {};
     if(options.colors === undefined) {
         options.colors = chalk.supportsColor;
     }
