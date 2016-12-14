@@ -2,6 +2,7 @@ var workerFarm = require('worker-farm'),
     Ajv = require('ajv'),
     Promise = require('bluebird'),
     chalk = require('chalk'),
+    assign = require('lodash.assign'),
     pluralize = require('pluralize'),
     schema = require('./schema.json'),
     loadConfigurationFile = require('./src/loadConfigurationFile');
@@ -9,6 +10,7 @@ var workerFarm = require('worker-farm'),
 var ajv = new Ajv({
     allErrors: true,
     coerceTypes: true,
+    removeAdditional: 'all',
     useDefaults: true
 });
 var validate = ajv.compile(schema);
@@ -64,8 +66,9 @@ function startFarm(config, configPath, options, runWorker) {
  */
 function run(configPath, options, callback) {
     var config,
-        argvBackup = process.argv;
-    options = options || {};
+        argvBackup = process.argv,
+        farmOptions = assign({}, options);
+        options = options || {};
     if(options.colors === undefined) {
         options.colors = chalk.supportsColor;
     }
@@ -85,7 +88,7 @@ function run(configPath, options, callback) {
         ));
     }
 
-    if (!validate(options)) {
+    if (!validate(farmOptions)) {
         return Promise.reject(new Error(
           'Options validation failed:\n' +
           validate.errors.map(function(error) {
@@ -94,7 +97,7 @@ function run(configPath, options, callback) {
         ));
     }
 
-    var workers = workerFarm(options, require.resolve('./src/webpackWorker'));
+    var workers = workerFarm(farmOptions, require.resolve('./src/webpackWorker'));
 
     var shutdownCallback = function() {
         if (notSilent(options)) {
