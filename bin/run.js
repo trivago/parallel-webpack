@@ -34,11 +34,11 @@ if(argv.version) {
     try {
         chalk.enabled = argv.colors;
         configPath = findConfigFile(path.resolve(argv.config));
-        
+
         run(configPath, {
             watch: argv.watch,
-            maxRetries: parseInt(argv['max-retries'], 10),
-            maxConcurrentWorkers: parseInt(argv['parallel'], 10),
+            maxRetries: argv['max-retries'],
+            maxConcurrentWorkers: argv['parallel'],
             bail: argv.bail,
             json: argv.json,
             modulesSort: argv['sort-modules-by'],

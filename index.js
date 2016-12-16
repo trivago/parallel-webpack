@@ -1,8 +1,19 @@
 var workerFarm = require('worker-farm'),
+    Ajv = require('ajv'),
     Promise = require('bluebird'),
     chalk = require('chalk'),
+    assign = require('lodash.assign'),
     pluralize = require('pluralize'),
+    schema = require('./schema.json'),
     loadConfigurationFile = require('./src/loadConfigurationFile');
+
+var ajv = new Ajv({
+    allErrors: true,
+    coerceTypes: true,
+    removeAdditional: 'all',
+    useDefaults: true
+});
+var validate = ajv.compile(schema);
 
 function notSilent(options) {
     return !options.json;
@@ -38,10 +49,16 @@ function startFarm(config, configPath, options, runWorker) {
  * @param {Object} options
  * @param {Boolean} [options.watch=false] If `true`, Webpack will run in
  *   `watch-mode`.
- * @param {boolean} [options.maxRetries=Infinity] The maximum amount of retries
- *   on build error
+ * @param {Number} [options.maxCallsPerWorker=Infinity] The maximum amount of calls
+ *   per parallel worker
  * @param {Number} [options.maxConcurrentWorkers=require('os').cpus().length] The
  *   maximum number of parallel workers
+ * @param {Number} [options.maxConcurrentCallsPerWorker=10] The maximum number of
+ *   concurrent call per prallel worker
+ * @param {Number} [options.maxConcurrentCalls=Infinity] The maximum number of
+ *   concurrent calls
+ * @param {Number} [options.maxRetries=0] The maximum amount of retries
+ *   on build error
  * @param {Function} [callback] A callback to be invoked once the build has
  *   been completed
  * @return {Promise} A Promise that is resolved once all builds have been
@@ -49,7 +66,8 @@ function startFarm(config, configPath, options, runWorker) {
  */
 function run(configPath, options, callback) {
     var config,
-        argvBackup = process.argv;
+        argvBackup = process.argv,
+        farmOptions = assign({}, options);
     options = options || {};
     if(options.colors === undefined) {
         options.colors = chalk.supportsColor;
@@ -70,13 +88,16 @@ function run(configPath, options, callback) {
         ));
     }
 
-    var maxRetries = parseInt(options.maxRetries, 10) || 0,
-        maxConcurrentWorkers = parseInt(options.maxConcurrentWorkers, 10)
-            || require('os').cpus().length,
-        workers = workerFarm({
-            maxRetries: maxRetries,
-            maxConcurrentWorkers: maxConcurrentWorkers
-        }, require.resolve('./src/webpackWorker'));
+    if (!validate(farmOptions)) {
+        return Promise.reject(new Error(
+          'Options validation failed:\n' +
+          validate.errors.map(function(error) {
+            return 'Property: "options' + error.dataPath + '" ' + error.message;
+          }).join('\n')
+        ));
+    }
+
+    var workers = workerFarm(farmOptions, require.resolve('./src/webpackWorker'));
 
     var shutdownCallback = function() {
         if (notSilent(options)) {

@@ -23,6 +23,7 @@
     "url": "https://github.com/trivago/parallel-webpack/issues"
   },
   "dependencies": {
+    "ajv": "^4.9.2",
     "bluebird": "^3.0.6",
     "chalk": "^1.1.1",
     "interpret": "^1.0.1",

@@ -1,0 +1,11 @@
+{
+    "type": "object",
+    "properties": {
+        "maxCallsPerWorker": { "type": "number" },
+        "maxConcurrentWorkers": { "type": "number" },
+        "maxConcurrentCallsPerWorker": { "type": "number" },
+        "maxConcurrentCalls": { "type": "number" },
+        "maxCallTime": { "type": "number" },
+        "maxRetries": { "type": "number", "default": 0 }
+    }
+}

@@ -208,7 +208,8 @@ are no differences between various ways of invoking the `webpack.config.js`.
 
 ## Node.js API
 
-Just like webpack, you can also use `parallel-webpack` as an API from node.js:
+Just like webpack, you can also use `parallel-webpack` as an API from node.js
+(You can specify any other option used in [worker-farm](https://www.npmjs.com/package/worker-farm)):
 
 ```javascript
 var run = require('parallel-webpack').run,
