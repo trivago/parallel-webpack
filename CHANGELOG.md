@@ -1,16 +1,30 @@
 # Change Log
 
-## [v1.5.0](https://github.com/trivago/parallel-webpack/tree/v1.5.0) (2016-06-14)
-[Full Changelog](https://github.com/trivago/parallel-webpack/compare/v1.4.0...v1.5.0)
+## [v1.6.0](https://github.com/trivago/parallel-webpack/tree/v1.6.0) (2016-12-16)
+[Full Changelog](https://github.com/trivago/parallel-webpack/compare/v1.5.0...v1.6.0)
 
 **Implemented enhancements:**
 
-- Replace name with entry name if possible [\#14](https://github.com/trivago/parallel-webpack/issues/14)
-- Add a changelog [\#15](https://github.com/trivago/parallel-webpack/issues/15)
+- Don't have options propagation to worker-farm expect: 'maxConcurrentWorkers' and 'maxRetries' [\#25](https://github.com/trivago/parallel-webpack/issues/25)
+- EventEmitter memory leak warnings [\#22](https://github.com/trivago/parallel-webpack/issues/22)
+- Please use a changelog [\#15](https://github.com/trivago/parallel-webpack/issues/15)
+- \[name\] logging [\#14](https://github.com/trivago/parallel-webpack/issues/14)
+
+**Fixed bugs:**
+
+- Don't forget call process.removeListener. [\#24](https://github.com/trivago/parallel-webpack/issues/24)
 
 **Closed issues:**
 
-- Add compatibility with node `0.10.x`
+- Pass config directly to Node API [\#21](https://github.com/trivago/parallel-webpack/issues/21)
+- \[Question\] Does it work with webpack dev server or middleware ? [\#18](https://github.com/trivago/parallel-webpack/issues/18)
+
+**Merged pull requests:**
+
+- Add calls process.removeListener [\#27](https://github.com/trivago/parallel-webpack/pull/27) ([wKich](https://github.com/wKich))
+
+## [v1.5.0](https://github.com/trivago/parallel-webpack/tree/v1.5.0) (2016-06-14)
+[Full Changelog](https://github.com/trivago/parallel-webpack/compare/v1.4.0...v1.5.0)
 
 **Merged pull requests:**
 
@@ -23,7 +37,6 @@
 
 - Add timestamp for continously rebuilds with the watcher in the console output [\#12](https://github.com/trivago/parallel-webpack/issues/12)
 - Add documentation for configurable configurations [\#6](https://github.com/trivago/parallel-webpack/issues/6)
-- various fixes for programmatic output \(mostly\) [\#10](https://github.com/trivago/parallel-webpack/pull/10) ([boneskull](https://github.com/boneskull))
 
 **Closed issues:**
 
@@ -31,10 +44,6 @@
 
 ## [v1.3.1](https://github.com/trivago/parallel-webpack/tree/v1.3.1) (2016-02-16)
 [Full Changelog](https://github.com/trivago/parallel-webpack/compare/v1.3.0...v1.3.1)
-
-**Closed issues:**
-
-- Watcher for 'npm start' gives wrong statistics about build time [\#7](https://github.com/trivago/parallel-webpack/issues/7)
 
 **Merged pull requests:**
 
@@ -46,10 +55,6 @@
 
 ## [v1.2.0](https://github.com/trivago/parallel-webpack/tree/v1.2.0) (2016-01-11)
 [Full Changelog](https://github.com/trivago/parallel-webpack/compare/v1.1.0...v1.2.0)
-
-**Implemented enhancements:**
-
-- Can you support --bail and --json flags? [\#2](https://github.com/trivago/parallel-webpack/issues/2)
 
 ## [v1.1.0](https://github.com/trivago/parallel-webpack/tree/v1.1.0) (2016-01-01)
 [Full Changelog](https://github.com/trivago/parallel-webpack/compare/v1.0.0...v1.1.0)
