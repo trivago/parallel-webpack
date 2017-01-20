@@ -92,11 +92,10 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
             shutdownCallback = function() {
                 if(watcher) {
                     watcher.close(done);
-                } else {
-                    done({
-                        message: chalk.red('[WEBPACK]') + ' Forcefully shut down ' + chalk.yellow(getAppName(webpackConfig))
-                    });
                 }
+                done({
+                    message: chalk.red('[WEBPACK]') + ' Forcefully shut down ' + chalk.yellow(getAppName(webpackConfig))
+                });
                 process.exit(0);
             },
             finishedCallback = function(err, stats) {

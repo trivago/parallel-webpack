@@ -130,8 +130,8 @@ function run(configPath, options, callback) {
             return results;
         }
     }).finally(function () {
-        process.removeListener('SIGINT', shutdownCallback);
         workerFarm.end(workers);
+        process.removeListener('SIGINT', shutdownCallback);
     }).asCallback(callback);
 }
 
