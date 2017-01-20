@@ -1,5 +1,13 @@
 # Change Log
 
+## [Unreleased](https://github.com/trivago/parallel-webpack/tree/HEAD)
+
+[Full Changelog](https://github.com/trivago/parallel-webpack/compare/v1.6.0...HEAD)
+
+**Fixed bugs:**
+
+- After ctrl+c build/watch restarts [\#29](https://github.com/trivago/parallel-webpack/issues/29)
+
 ## [v1.6.0](https://github.com/trivago/parallel-webpack/tree/v1.6.0) (2016-12-16)
 [Full Changelog](https://github.com/trivago/parallel-webpack/compare/v1.5.0...v1.6.0)
 
@@ -8,7 +16,6 @@
 - Don't have options propagation to worker-farm expect: 'maxConcurrentWorkers' and 'maxRetries' [\#25](https://github.com/trivago/parallel-webpack/issues/25)
 - EventEmitter memory leak warnings [\#22](https://github.com/trivago/parallel-webpack/issues/22)
 - Please use a changelog [\#15](https://github.com/trivago/parallel-webpack/issues/15)
-- \[name\] logging [\#14](https://github.com/trivago/parallel-webpack/issues/14)
 
 **Fixed bugs:**
 
@@ -21,6 +28,7 @@
 
 **Merged pull requests:**
 
+- Implement options propagation to worker-farm. Add schema json validation. [\#28](https://github.com/trivago/parallel-webpack/pull/28) ([wKich](https://github.com/wKich))
 - Add calls process.removeListener [\#27](https://github.com/trivago/parallel-webpack/pull/27) ([wKich](https://github.com/wKich))
 
 ## [v1.5.0](https://github.com/trivago/parallel-webpack/tree/v1.5.0) (2016-06-14)
@@ -35,19 +43,17 @@
 
 **Implemented enhancements:**
 
-- Add timestamp for continously rebuilds with the watcher in the console output [\#12](https://github.com/trivago/parallel-webpack/issues/12)
-- Add documentation for configurable configurations [\#6](https://github.com/trivago/parallel-webpack/issues/6)
-
-**Closed issues:**
-
-- Add config extension interpretation for ".babel.js", ".coffee", etc [\#13](https://github.com/trivago/parallel-webpack/issues/13)
+- various fixes for programmatic output \(mostly\) [\#10](https://github.com/trivago/parallel-webpack/pull/10) ([boneskull](https://github.com/boneskull))
 
 ## [v1.3.1](https://github.com/trivago/parallel-webpack/tree/v1.3.1) (2016-02-16)
 [Full Changelog](https://github.com/trivago/parallel-webpack/compare/v1.3.0...v1.3.1)
 
+**Closed issues:**
+
+- Watcher for 'npm start' gives wrong statistics about build time [\#7](https://github.com/trivago/parallel-webpack/issues/7)
+
 **Merged pull requests:**
 
-- Use timing stats directly from Webpack [\#9](https://github.com/trivago/parallel-webpack/pull/9) ([lime](https://github.com/lime))
 - Use global parseInt instead of Number.parseInt [\#8](https://github.com/trivago/parallel-webpack/pull/8) ([lime](https://github.com/lime))
 
 ## [v1.3.0](https://github.com/trivago/parallel-webpack/tree/v1.3.0) (2016-01-26)
