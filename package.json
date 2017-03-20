@@ -33,7 +33,7 @@
     "minimist": "^1.2.0",
     "pluralize": "^1.2.1",
     "supports-color": "^3.1.2",
-    "webpack": "^1.12.9",
+    "webpack": "^1.12.9 || ^2.2.0",
     "worker-farm": "^1.3.1"
   }
 }
