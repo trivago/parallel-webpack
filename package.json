@@ -23,7 +23,7 @@
     "url": "https://github.com/trivago/parallel-webpack/issues"
   },
   "peerDependencies": {
-    "webpack": "^1.12.9 || ^2.2.0"
+    "webpack": "^1.12.9 || ^2.2.0 || ^3.0.0"
   },
   "dependencies": {
     "ajv": "^4.9.2",
