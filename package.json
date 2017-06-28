@@ -1,6 +1,6 @@
 {
   "name": "parallel-webpack",
-  "version": "1.6.1",
+  "version": "2.0.0",
   "description": "Builds multiple webpack configurations in parallel and allows you to easily create variants to those configurations.",
   "main": "index.js",
   "bin": {
