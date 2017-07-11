@@ -1,6 +1,3 @@
-/**
- * Created by pgotthardt on 07/12/15.
- */
 var assign = require('lodash.assign');
 var flatten = require('lodash.flatten');
 
