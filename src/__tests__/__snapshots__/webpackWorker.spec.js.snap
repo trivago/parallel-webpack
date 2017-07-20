@@ -1,0 +1,78 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`webpackWorker arguments options should call done with stats when there is stats object 1`] = `
+Object {
+  "message": "[WEBPACK] Errors building testApp
+module not found
+module not found 2",
+  "stats": "{
+  \\"compilation\\": {
+    \\"errors\\": [
+      {
+        \\"message\\": \\"module not found\\"
+      },
+      {
+        \\"message\\": \\"module not found 2\\"
+      }
+    ]
+  }
+}",
+}
+`;
+
+exports[`webpackWorker arguments options should log in watch mode instead of calling done callback 1`] = `
+Array [
+  Array [
+    "%s Started %s %s",
+    "[WEBPACK]",
+    "watching",
+    "testApp",
+  ],
+  Array [
+    "[WEBPACK] Errors building testApp
+module not found
+module not found 2",
+  ],
+  Array [
+    "%s Finished building %s within %s seconds",
+    "[WEBPACK 12:05:54]",
+    "testApp",
+    "NaN",
+  ],
+]
+`;
+
+exports[`webpackWorker creator function finishedCallback should remove SIGINT and call done with stats 1`] = `
+Array [
+  null,
+  "\\"size: 321.kb\\"",
+]
+`;
+
+exports[`webpackWorker creator function shutdownCallback should call done callback 1`] = `
+Object {
+  "message": "[WEBPACK] Forcefully shut down testApp",
+}
+`;
+
+exports[`webpackWorker creator function shutdownCallback should watcher.close and done in watch mode on SIGINT 1`] = `
+Object {
+  "message": "[WEBPACK] Forcefully shut down testApp",
+}
+`;
+
+exports[`webpackWorker module functions getOutputOptions should get stats options if they set 1`] = `
+Array [
+  Array [
+    Object {
+      "assetsSort": "name",
+      "chunksSort": "size",
+      "colors": true,
+      "exclude": Array [
+        "file",
+      ],
+      "modulesSort": "name",
+    },
+  ],
+]
+`;

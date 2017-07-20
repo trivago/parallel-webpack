@@ -7,7 +7,7 @@
     "parallel-webpack": "bin/run.js"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --silent"
   },
   "keywords": [
     "webpack",
