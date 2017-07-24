@@ -60,5 +60,18 @@ module.exports = function(configPath) {
             throw new Error('Could not load required module loading for ' + chalk.underline(configPath));
         }
     }
-    return require(configPath);
+    var config = require(configPath);
+    if (typeof config === 'function')
+        return config(
+            process.argv.filter(function (arg) {
+                return arg.slice(0, 6) === '--env.';
+            }).map(function (arg) {
+                var parts = arg.split('=');
+                return [parts[0].slice(6), parts.slice(1).join('=')];
+            }).reduce(function (env, pair) {
+                env[pair[0]] = pair[1];
+                return env;
+            }, {})
+        );
+    return config;
 }
