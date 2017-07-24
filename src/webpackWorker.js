@@ -139,7 +139,7 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
         }
         var compiler = webpack(webpackConfig);
         if(watch || webpack.watch) {
-            watcher = compiler.watch({}, finishedCallback);
+            watcher = compiler.watch(webpackConfig.watchOptions, finishedCallback);
         } else {
             compiler.run(finishedCallback);
         }
