@@ -60,5 +60,10 @@ module.exports = function(configPath) {
             throw new Error('Could not load required module loading for ' + chalk.underline(configPath));
         }
     }
-    return require(configPath);
+    var req = require(configPath);
+    if (typeof req === 'function') {
+        return req();
+    } else {
+        return req;
+    }
 }
