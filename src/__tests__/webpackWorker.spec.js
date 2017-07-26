@@ -4,7 +4,7 @@ const watch = jest.fn().mockReturnValue({ close });
 
 jest.setMock('webpack',  () => ({ run, watch })); // try to get rid of this.
 
-    let webpackWorker;
+let webpackWorker;
 let promiseMock;
 let webpackMock;
 
@@ -36,7 +36,7 @@ describe('webpackWorker', () => {
                         endTime: 1500054500,
                 };
                 const doneCallback = jest.fn();
-                jest.spyOn(console, 'log');
+                jest.spyOn(console, 'log').mockImplementation(() => {});
 
 
                 webpackWorker('testConfig', options , 0, 1, doneCallback);
@@ -144,7 +144,7 @@ describe('webpackWorker', () => {
             const multiConfigTest = options => {
                 const errorMessage = '[WEBPACK] There is a difference between the amount of the provided configs. Maybe you where expecting command line arguments to be passed to your webpack.config.js. If so, you\'ll need to separate them with a -- from the parallel-webpack options.'
                 jest.doMock('multiTestConfig', () => ( [{ fail: true}, { webpack: 'config'}]), { virtual: true });
-                jest.spyOn(console, 'error');
+                jest.spyOn(console, 'error').mockImplementation(() => {});
 
                 webpackWorker(
                     options.multi ?  'multiTestConfig' : 'testConfig',
