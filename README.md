@@ -21,16 +21,17 @@ so that we have full control over its versions.
 Given a `webpack.config.js` like this:
 
 ```javascript
+var path = require('path');
 module.exports = [{
-    entry: 'pageA.js',
+    entry: './pageA.js',
     output: {
-        path: './dist',
+        path: path.resolve(__dirname, './dist'),
         filename: 'pageA.bundle.js'
     }
 }, {
-    entry: 'pageB.js',
+    entry: './pageB.js',
     output: {
-        path: './dist',
+        path: path.resolve(__dirname, './dist'),
         filename: 'pageB.bundle.js'
     }
 }];
