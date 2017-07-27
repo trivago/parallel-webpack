@@ -63,5 +63,9 @@ module.exports = function(configPath) {
     var config = require(configPath);
     if (typeof config === 'function')
         return config(require('minimist')(process.argv, { '--': true }).env || {});
-    return config;
+    } else if (typeof config === 'object' && typeof config.default === 'function') {
+        return config.default(require('minimist')(process.argv, { '--': true }).env || {});
+    } else {
+        return config;
+    }
 }
