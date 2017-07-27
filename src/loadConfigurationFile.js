@@ -30,6 +30,16 @@ function getMatchingLoader(configPath) {
     return null;
 }
 
+function callConfigFunction(fn) {
+    return fn(require('minimist')(process.argv, { '--': true }).env || {});
+}
+
+function getConfig(configPath) {
+    var configModule = require(configPath);
+    var configDefault = configModule && configModule.__esModule ? configModule.default : configModule;
+    return typeof configDefault === 'function' ? callConfigFunction(configDefault) : configDefault;
+}
+
 module.exports = function(configPath) {
     var mod = getMatchingLoader(configPath);
     if(mod) {
@@ -60,12 +70,5 @@ module.exports = function(configPath) {
             throw new Error('Could not load required module loading for ' + chalk.underline(configPath));
         }
     }
-    var config = require(configPath);
-    if (typeof config === 'function')
-        return config(require('minimist')(process.argv, { '--': true }).env || {});
-    } else if (typeof config === 'object' && typeof config.default === 'function') {
-        return config.default(require('minimist')(process.argv, { '--': true }).env || {});
-    } else {
-        return config;
-    }
+    return getConfig(configPath);
 }
