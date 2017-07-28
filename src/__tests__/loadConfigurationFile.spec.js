@@ -106,7 +106,16 @@ describe('loadConfigurationFile module', () => {
             expect(() => {
                 loadConfigurationFile('/does/not/exist.co', () => [null]);
             }).toThrow(`Could not load required module loading for ${underline('/does/not/exist.co')}`)
-        })
+        });
+
+        it('should pass `env` when config exports a function', () => {
+            jest.doMock('test.js', () => (env) => env, { virtual: true });
+            const oldArgv = process.argv;
+            process.argv = ['--env.foo', 'bar', '--env.bar', '--foo', '--env.baz="foo bar"'];
+            const result = loadConfigurationFile('test.js', () => null);
+            expect(result).toEqual({foo: 'bar', bar: true, baz: '\"foo bar\"'});
+            process.argv = oldArgv;
+        });
 
     });
 
