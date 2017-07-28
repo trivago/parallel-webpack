@@ -7,7 +7,7 @@
     "parallel-webpack": "bin/run.js"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest --coverage && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
   },
   "keywords": [
     "webpack",
@@ -41,6 +41,7 @@
   "devDependencies": {
     "babel-jest": "^20.0.3",
     "babel-preset-env": "^1.5.2",
+    "coveralls": "^2.13.1",
     "jest": "^20.0.4",
     "webpack": "^3.4.1"
   }
