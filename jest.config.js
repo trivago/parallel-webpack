@@ -1,3 +1,9 @@
 module.exports = {
-  testEnvironment: 'node'
+    testEnvironment: 'node',
+    collectCoverageFrom : [
+        '**/*.js',
+        '!**/node_modules/**',
+        '!*jest.config.js',
+        '!**/coverage/**'
+    ]
 }
