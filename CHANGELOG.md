@@ -1,5 +1,16 @@
 # Change Log
 
+## [v2.0.0](https://github.com/trivago/parallel-webpack/tree/v2.1.0) (2017-07-28)
+[Full Changelog](https://github.com/trivago/parallel-webpack/compare/v2.0.0...v2.1.0)
+
+**Merged pull requests:**
+
+- Implement tests [\#44](https://github.com/parallel-webpack/pull/44) ([efegurkan] (https://github.com/efegurkan))
+- pass watch options to the compiler [\#46](https://github.com/parallel-webpack/pull/46) ([BenoitZugmeyer] (https://github.com/BenoitZugmeyer))
+- Adjust basic example [\#47](https://github.com/parallel-webpack/pull/47) ([Robbilie] (https://github.com/Robbilie))
+- support config as export function [\#48](https://github.com/parallel-webpack/pull/48) ([Robbilie] (https://github.com/Robbilie))
+- travis and circle-ci integrations [\#49](https://github.com/parallel-webpack/pull/49) ([efegurkan] (https://github.com/efegurkan))
+
 ## [v2.0.0](https://github.com/trivago/parallel-webpack/tree/v2.0.0) (2017-06-28)
 [Full Changelog](https://github.com/trivago/parallel-webpack/compare/v1.6.1...v2.0.0)
 
