@@ -33,6 +33,16 @@ function getMatchingLoaderFn(configPath, extensions, variants) {
     return null;
 }
 
+function callConfigFunction(fn) {
+    return fn(require('minimist')(process.argv, { '--': true }).env || {});
+}
+
+function getConfig(configPath) {
+    var configModule = require(configPath);
+    var configDefault = configModule && configModule.__esModule ? configModule.default : configModule;
+    return typeof configDefault === 'function' ? callConfigFunction(configDefault) : configDefault;
+}
+
 module.exports = {
     default: function(configPath, matchingLoader) {
         let getMatchingLoader = matchingLoader || getMatchingLoaderFn;
@@ -66,7 +76,7 @@ module.exports = {
                 throw new Error('Could not load required module loading for ' + chalk.underline(configPath));
             }
         }
-        return require(configPath);
+        return getConfig(configPath);
     },
     getMatchingLoader: getMatchingLoaderFn,
     availableExtensions: availableExts,
