@@ -3,7 +3,6 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: circleci/node:4
       - image: circleci/node:6
       - image: circleci/node:latest
 
