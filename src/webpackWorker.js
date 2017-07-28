@@ -1,10 +1,6 @@
-/**
- * Created by pgotthardt on 07/12/15.
- */
-
 var Promise = require('bluebird'),
     chalk = require('chalk'),
-    loadConfigurationFile = require('./loadConfigurationFile');
+    loadConfigurationFile = require('./loadConfigurationFile').default;
 
 /**
  * Choose the most correct version of webpack, prefer locally installed version,

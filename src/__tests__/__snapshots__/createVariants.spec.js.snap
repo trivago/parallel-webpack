@@ -1,0 +1,297 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`createVariants should generate configs with "baseConfig, variants, configCallback" as params 1`] = `
+Array [
+  Object {
+    "debug": true,
+    "features": 0,
+    "name": "bundle.rtl.dbg.0.js",
+    "rtl": true,
+  },
+  Object {
+    "debug": true,
+    "features": 1,
+    "name": "bundle.rtl.dbg.1.js",
+    "rtl": true,
+  },
+  Object {
+    "debug": true,
+    "features": 2,
+    "name": "bundle.rtl.dbg.2.js",
+    "rtl": true,
+  },
+  Object {
+    "debug": false,
+    "features": 0,
+    "name": "bundle.rtl.no-debug.0.js",
+    "rtl": true,
+  },
+  Object {
+    "debug": false,
+    "features": 1,
+    "name": "bundle.rtl.no-debug.1.js",
+    "rtl": true,
+  },
+  Object {
+    "debug": false,
+    "features": 2,
+    "name": "bundle.rtl.no-debug.2.js",
+    "rtl": true,
+  },
+  Object {
+    "debug": true,
+    "features": 0,
+    "name": "bundle.no-rtl.dbg.0.js",
+    "rtl": false,
+  },
+  Object {
+    "debug": true,
+    "features": 1,
+    "name": "bundle.no-rtl.dbg.1.js",
+    "rtl": false,
+  },
+  Object {
+    "debug": true,
+    "features": 2,
+    "name": "bundle.no-rtl.dbg.2.js",
+    "rtl": false,
+  },
+  Object {
+    "debug": false,
+    "features": 0,
+    "name": "bundle.no-rtl.no-debug.0.js",
+    "rtl": false,
+  },
+  Object {
+    "debug": false,
+    "features": 1,
+    "name": "bundle.no-rtl.no-debug.1.js",
+    "rtl": false,
+  },
+  Object {
+    "debug": false,
+    "features": 2,
+    "name": "bundle.no-rtl.no-debug.2.js",
+    "rtl": false,
+  },
+]
+`;
+
+exports[`createVariants should generate configs with "variants" as params 1`] = `
+Array [
+  Object {
+    "debug": true,
+    "features": 0,
+    "rtl": true,
+  },
+  Object {
+    "debug": true,
+    "features": 1,
+    "rtl": true,
+  },
+  Object {
+    "debug": true,
+    "features": 2,
+    "rtl": true,
+  },
+  Object {
+    "debug": false,
+    "features": 0,
+    "rtl": true,
+  },
+  Object {
+    "debug": false,
+    "features": 1,
+    "rtl": true,
+  },
+  Object {
+    "debug": false,
+    "features": 2,
+    "rtl": true,
+  },
+  Object {
+    "debug": true,
+    "features": 0,
+    "rtl": false,
+  },
+  Object {
+    "debug": true,
+    "features": 1,
+    "rtl": false,
+  },
+  Object {
+    "debug": true,
+    "features": 2,
+    "rtl": false,
+  },
+  Object {
+    "debug": false,
+    "features": 0,
+    "rtl": false,
+  },
+  Object {
+    "debug": false,
+    "features": 1,
+    "rtl": false,
+  },
+  Object {
+    "debug": false,
+    "features": 2,
+    "rtl": false,
+  },
+]
+`;
+
+exports[`createVariants should generate configs with "variants, configCallback" as params 1`] = `
+Array [
+  Object {
+    "debug": true,
+    "features": 0,
+    "name": "bundle.rtl.dbg.0.js",
+    "rtl": true,
+  },
+  Object {
+    "debug": true,
+    "features": 1,
+    "name": "bundle.rtl.dbg.1.js",
+    "rtl": true,
+  },
+  Object {
+    "debug": true,
+    "features": 2,
+    "name": "bundle.rtl.dbg.2.js",
+    "rtl": true,
+  },
+  Object {
+    "debug": false,
+    "features": 0,
+    "name": "bundle.rtl.no-debug.0.js",
+    "rtl": true,
+  },
+  Object {
+    "debug": false,
+    "features": 1,
+    "name": "bundle.rtl.no-debug.1.js",
+    "rtl": true,
+  },
+  Object {
+    "debug": false,
+    "features": 2,
+    "name": "bundle.rtl.no-debug.2.js",
+    "rtl": true,
+  },
+  Object {
+    "debug": true,
+    "features": 0,
+    "name": "bundle.no-rtl.dbg.0.js",
+    "rtl": false,
+  },
+  Object {
+    "debug": true,
+    "features": 1,
+    "name": "bundle.no-rtl.dbg.1.js",
+    "rtl": false,
+  },
+  Object {
+    "debug": true,
+    "features": 2,
+    "name": "bundle.no-rtl.dbg.2.js",
+    "rtl": false,
+  },
+  Object {
+    "debug": false,
+    "features": 0,
+    "name": "bundle.no-rtl.no-debug.0.js",
+    "rtl": false,
+  },
+  Object {
+    "debug": false,
+    "features": 1,
+    "name": "bundle.no-rtl.no-debug.1.js",
+    "rtl": false,
+  },
+  Object {
+    "debug": false,
+    "features": 2,
+    "name": "bundle.no-rtl.no-debug.2.js",
+    "rtl": false,
+  },
+]
+`;
+
+exports[`createVariants should generate configs with baseConfig and variants 1`] = `
+Array [
+  Object {
+    "debug": true,
+    "features": 0,
+    "name": "bundle.base",
+    "rtl": true,
+  },
+  Object {
+    "debug": true,
+    "features": 1,
+    "name": "bundle.base",
+    "rtl": true,
+  },
+  Object {
+    "debug": true,
+    "features": 2,
+    "name": "bundle.base",
+    "rtl": true,
+  },
+  Object {
+    "debug": false,
+    "features": 0,
+    "name": "bundle.base",
+    "rtl": true,
+  },
+  Object {
+    "debug": false,
+    "features": 1,
+    "name": "bundle.base",
+    "rtl": true,
+  },
+  Object {
+    "debug": false,
+    "features": 2,
+    "name": "bundle.base",
+    "rtl": true,
+  },
+  Object {
+    "debug": true,
+    "features": 0,
+    "name": "bundle.base",
+    "rtl": false,
+  },
+  Object {
+    "debug": true,
+    "features": 1,
+    "name": "bundle.base",
+    "rtl": false,
+  },
+  Object {
+    "debug": true,
+    "features": 2,
+    "name": "bundle.base",
+    "rtl": false,
+  },
+  Object {
+    "debug": false,
+    "features": 0,
+    "name": "bundle.base",
+    "rtl": false,
+  },
+  Object {
+    "debug": false,
+    "features": 1,
+    "name": "bundle.base",
+    "rtl": false,
+  },
+  Object {
+    "debug": false,
+    "features": 2,
+    "name": "bundle.base",
+    "rtl": false,
+  },
+]
+`;

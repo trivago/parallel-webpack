@@ -31,6 +31,6 @@ module.exports = function(configPath) {
             return configPath + ext;
         }
     }
-    
+
     throw new Error('File does not exist');
 }

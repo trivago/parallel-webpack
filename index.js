@@ -5,7 +5,7 @@ var workerFarm = require('worker-farm'),
     assign = require('lodash.assign'),
     pluralize = require('pluralize'),
     schema = require('./schema.json'),
-    loadConfigurationFile = require('./src/loadConfigurationFile');
+    loadConfigurationFile = require('./src/loadConfigurationFile').default;
 
 var ajv = new Ajv({
     allErrors: true,
