@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/trivago/parallel-webpack.svg?branch=master)](https://travis-ci.org/trivago/parallel-webpack) [![CircleCI](https://circleci.com/gh/trivago/parallel-webpack.svg?style=svg)](https://circleci.com/gh/trivago/parallel-webpack)
+[![Build Status](https://travis-ci.org/trivago/parallel-webpack.svg?branch=master)](https://travis-ci.org/trivago/parallel-webpack) [![CircleCI](https://circleci.com/gh/trivago/parallel-webpack.svg?style=svg)](https://circleci.com/gh/trivago/parallel-webpack) [![Coverage Status](https://coveralls.io/repos/github/trivago/parallel-webpack/badge.svg?branch=coverage)](https://coveralls.io/github/trivago/parallel-webpack?branch=coverage)
 # parallel-webpack - Building multi-configs in parallel
 
 `parallel-webpack` allows you to run multiple webpack builds in parallel,
