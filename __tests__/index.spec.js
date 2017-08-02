@@ -19,7 +19,7 @@ describe('index.js', () => {
         })
 
         it('should reject promise config cannot get loaded', () => {
-            const returnPromise = run('./does/not/exist.js', { colors: true }, jest.fn());
+            const returnPromise = run('./does/not/exist.js', { colors: false }, jest.fn());
             expect(returnPromise.reject.mock.calls[0][0].toString()).toMatchSnapshot();
         });
 
@@ -32,7 +32,7 @@ describe('index.js', () => {
             jest.spyOn(console, 'log').mockImplementation(() => {});
             promisify.mockReturnValueOnce(jest.fn());
 
-            const returnPromise = run('testConfig.js', {}, jest.fn());
+            const returnPromise = run('testConfig.js', { colors: false }, jest.fn());
             expect(workerFarm.mock.calls[0][0]).toEqual({ maxRetries: 0 });
 
             expect(returnPromise).toBe(Bluebird);
@@ -56,7 +56,7 @@ describe('index.js', () => {
 
                 const returnPromise = run('testConfig.js', {
                     json: options.silent,
-                    colors: true
+                    colors: false
                 }, jest.fn());
                 const cb = returnPromise.error.mock.calls[0][0];
                 const response = cb('Exception on worker farm');
@@ -91,7 +91,7 @@ describe('index.js', () => {
 
                 const returnPromise = run('testConfig.js', {
                     json: options.silent,
-                    colors: true
+                    colors: false
                 }, jest.fn());
                 const cb = returnPromise.then.mock.calls[1][0];
                 const response = cb([true, true, false, undefined, '', 0]);
@@ -116,7 +116,7 @@ describe('index.js', () => {
             it('should call end workerFarm and remove SIGINT listener', () => {
                 promisify.mockReturnValueOnce(jest.fn());
 
-                const returnPromise = run('testConfig.js', {}, jest.fn());
+                const returnPromise = run('testConfig.js', { colors: false }, jest.fn());
                 const cb = returnPromise.finally.mock.calls[0][0];
 
                 expect(process.listenerCount('SIGINT')).toBe(1);
@@ -134,7 +134,7 @@ describe('index.js', () => {
 
                 const returnPromise = run('testConfig.js', {
                     json: options.silent,
-                    colors: true
+                    colors: false
                 }, jest.fn());
 
                 expect(process.listenerCount('SIGINT')).toBe(1);
