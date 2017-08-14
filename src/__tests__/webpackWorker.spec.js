@@ -3,16 +3,19 @@ const close = jest.fn();
 const watch = jest.fn().mockReturnValue({ close });
 
 jest.setMock('webpack',  () => ({ run, watch })); // try to get rid of this.
+jest.mock('../watchModeIPC');
 
 let webpackWorker;
 let promiseMock;
 let webpackMock;
+let notifyIPCWatchCompileDone; 
 
 describe('webpackWorker', () => {
     beforeEach(() => {
         promiseMock = require('bluebird');
         webpackMock = require('webpack');
         webpackWorker = require('../webpackWorker.js');
+        notifyIPCWatchCompileDone = require('../watchModeIPC').notifyIPCWatchCompileDone;
         jest.doMock('testConfig', () => ({ webpack: 'config' }), { virtual: true });
         jest.resetModules();
         jest.clearAllMocks();
@@ -133,6 +136,7 @@ describe('webpackWorker', () => {
                 expect(process.listenerCount('SIGINT')).toBe(1);
                 expect(doneCallback).not.toHaveBeenCalled();
                 expect(console.log.mock.calls).toMatchSnapshot();
+                expect(notifyIPCWatchCompileDone).toHaveBeenCalledWith(0);
                 process.removeAllListeners('SIGINT');
                 jest.useRealTimers();
                 global.Date = _temp;

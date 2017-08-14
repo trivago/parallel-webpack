@@ -1,7 +1,7 @@
 var Promise = require('bluebird'),
     chalk = require('chalk'),
-    loadConfigurationFile = require('./loadConfigurationFile').default;
-
+    loadConfigurationFile = require('./loadConfigurationFile').default,
+    notifyIPCWatchCompileDone = require('./watchModeIPC').notifyIPCWatchCompileDone;
 /**
  * Choose the most correct version of webpack, prefer locally installed version,
  * fallback to the own dependency if there's none.
@@ -84,6 +84,7 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
     Promise.resolve(config).then(function(webpackConfig) {
         var watcher,
             webpack = getWebpack(),
+            hasCompletedOneCompile = false,
             outputOptions = getOutputOptions(webpackConfig, options),
             shutdownCallback = function() {
                 if(watcher) {
@@ -128,6 +129,9 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
                 if(!watch) {
                     process.removeListener('SIGINT', shutdownCallback);
                     done(null, options.stats ? JSON.stringify(stats.toJson(outputOptions), null, 2) : '');
+                } else if (!hasCompletedOneCompile) {
+                    notifyIPCWatchCompileDone(index);
+                    hasCompletedOneCompile = true;
                 }
             };
         if(!silent) {
