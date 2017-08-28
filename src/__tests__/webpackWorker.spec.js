@@ -8,7 +8,7 @@ jest.mock('../watchModeIPC');
 let webpackWorker;
 let promiseMock;
 let webpackMock;
-let notifyIPCWatchCompileDone; 
+let notifyIPCWatchCompileDone;
 
 describe('webpackWorker', () => {
     beforeEach(() => {

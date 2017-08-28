@@ -5,8 +5,8 @@ var workerFarm = require('worker-farm'),
     assign = require('lodash.assign'),
     pluralize = require('pluralize'),
     schema = require('./schema.json'),
-	loadConfigurationFile = require('./src/loadConfigurationFile').default,
-	startWatchIPCServer = require('./src/watchModeIPC').startWatchIPCServer;
+    loadConfigurationFile = require('./src/loadConfigurationFile').default,
+    startWatchIPCServer = require('./src/watchModeIPC').startWatchIPCServer;
 
 var ajv = new Ajv({
     allErrors: true,
@@ -23,17 +23,17 @@ function notSilent(options) {
 function startFarm(config, configPath, options, runWorker, callback) {
     config = Array.isArray(config) ? config : [config];
     options = options || {};
-	
-	// When in watch mode and a callback is provided start IPC server to invoke callback 
-	// once all webpack configurations have been compiled
-	if (options.watch) {
-		startWatchIPCServer(callback, Object.keys(config));
-	}
+
+    // When in watch mode and a callback is provided start IPC server to invoke callback
+    // once all webpack configurations have been compiled
+    if (options.watch) {
+        startWatchIPCServer(callback, Object.keys(config));
+    }
 
     if(notSilent(options)) {
         console.log(chalk.blue('[WEBPACK]') + ' Building ' + chalk.yellow(config.length) + ' ' + pluralize('target', config.length));
     }
-	
+
     var builds = config.map(function (c, i) {
         return runWorker(configPath, options, i, config.length);
     });
@@ -122,7 +122,7 @@ function run(configPath, options, callback) {
         configPath,
         options,
         Promise.promisify(workers),
-		callback
+        callback
     ).error(function(err) {
         if(notSilent(options)) {
             console.log('%s Build failed after %s seconds', chalk.red('[WEBPACK]'), chalk.blue((Date.now() - startTime) / 1000));
@@ -141,12 +141,12 @@ function run(configPath, options, callback) {
     }).finally(function () {
         workerFarm.end(workers);
         process.removeListener('SIGINT', shutdownCallback);
-	});
+    });
 
-	if (!options.watch) {
-		farmPromise.asCallback(callback);
-	}
-	return farmPromise;
+    if (!options.watch) {
+        farmPromise.asCallback(callback);
+    }
+    return farmPromise;
 }
 
 module.exports = {
