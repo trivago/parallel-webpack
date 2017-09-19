@@ -1,6 +1,18 @@
 # Change Log
 
-## [v2.0.0](https://github.com/trivago/parallel-webpack/tree/v2.1.0) (2017-07-28)
+## [v2.2.0](https://github.com/trivago/parallel-webpack/tree/v2.2.0) (2017-09-19)
+[Full Changelog](https://github.com/trivago/parallel-webpack/compare/v2.1.0...v2.2.0)
+
+**Merged pull requests:**
+
+- watch mode done callback [\#55](https://github.com/parallel-webpack/pull/55) ([natedanner] (https://github.com/natedanner))
+- Update package.json to support webpack 3.1.0 [\#59](https://github.com/parallel-webpack/pull/59) ([clowNay] (https://github.com/clowNay))
+
+**Closed issues:**
+
+- On complete hook [\#39](https://github.com/trivago/parallel-webpack/issues/39)
+
+## [v2.1.0](https://github.com/trivago/parallel-webpack/tree/v2.1.0) (2017-07-28)
 [Full Changelog](https://github.com/trivago/parallel-webpack/compare/v2.0.0...v2.1.0)
 
 **Merged pull requests:**
