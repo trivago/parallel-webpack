@@ -21,7 +21,7 @@ function getAppName(webpackConfig) {
         var entryNames = Object.keys(webpackConfig.entry);
         if(entryNames.length === 1) {
             // we can only replace [name] with the entry point if there is only one entry point
-            appName = appName.replace(/\[name]/, entryNames[0]);
+            appName = appName.replace(/\[name]/g, entryNames[0]);
         }
     }
     return appName;
