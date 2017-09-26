@@ -224,6 +224,20 @@ describe('webpackWorker', () => {
                     'bundle.testApp.js'
                 );
             });
+
+            it('should replace all matches of "[name]" pattern if there is one entry point', () => {
+                getAppNameTest(
+                    {
+                        output: {
+                            filename: 'bundle/[name]/[name].js',
+                        },
+                        entry: {
+                            testApp: 'filepath',
+                        }
+                    },
+                    'bundle/testApp/testApp.js'
+                );
+            });
         });
 
         describe('getOutputOptions', () => {
