@@ -21,12 +21,14 @@ const possibleExtensions = [
     '.liticed',
     '.ls',
     '.ts',
-    '.wisp'
+    '.wisp',
 ];
 
 describe('findConfigFile', () => {
     it('should throw error when config file not exists', () => {
-        fs.accessSync.mockImplementation(() => {throw new Error()});
+        fs.accessSync.mockImplementation(() => {
+            throw new Error();
+        });
 
         expect(() => {
             findConfigFile('/path/to/file');
@@ -34,23 +36,29 @@ describe('findConfigFile', () => {
     });
 
     it('should try for all of possible file extensions', () => {
-        fs.accessSync.mockImplementation(() => {throw new Error()});
+        fs.accessSync.mockImplementation(() => {
+            throw new Error();
+        });
 
         expect(() => {
             findConfigFile('/path/to/file');
         }).toThrow('File does not exist');
 
         possibleExtensions.forEach((ext, index) => {
-            expect(fs.accessSync.mock.calls[index][0]).toBe('/path/to/file' + ext);
+            expect(fs.accessSync.mock.calls[index][0]).toBe(
+                '/path/to/file' + ext,
+            );
         });
-
     });
+
     it('should use statSync when accessSync is not available', () => {
         fs.accessSync = null;
-        fs.statSync = jest.fn(() => { isFile: jest.fn().mockReturnValue(false)})
+        fs.statSync = jest.fn(() => {
+            isFile: jest.fn().mockReturnValue(false);
+        });
 
         expect(() => {
-            findConfigFile('/path/to/file')
+            findConfigFile('/path/to/file');
         }).toThrow();
 
         expect(fs.statSync).toHaveBeenCalledTimes(18);
@@ -63,9 +71,11 @@ describe('findConfigFile', () => {
     });
 
     it('should return file from statSync', () => {
-        fs.accessSync =  null;
-        fs.statSync = jest.fn(() => ({ isFile: jest.fn().mockReturnValue(true)}));
+        fs.accessSync = null;
+        fs.statSync = jest.fn(() => ({
+            isFile: jest.fn().mockReturnValue(true),
+        }));
 
         expect(findConfigFile('/path/to/file')).toBe('/path/to/file');
-    })
+    });
 });

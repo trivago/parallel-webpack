@@ -1,5 +1,7 @@
 [![npm version](https://badge.fury.io/js/parallel-webpack.svg)](https://badge.fury.io/js/parallel-webpack)
-[![Build Status](https://travis-ci.org/trivago/parallel-webpack.svg?branch=master)](https://travis-ci.org/trivago/parallel-webpack) [![CircleCI](https://circleci.com/gh/trivago/parallel-webpack.svg?style=svg)](https://circleci.com/gh/trivago/parallel-webpack) [![Coverage Status](https://coveralls.io/repos/github/trivago/parallel-webpack/badge.svg?branch=coverage)](https://coveralls.io/github/trivago/parallel-webpack?branch=coverage)
+[![Build Status](https://travis-ci.org/trivago/parallel-webpack.svg?branch=master)](https://travis-ci.org/trivago/parallel-webpack)
+[![CircleCI](https://circleci.com/gh/trivago/parallel-webpack.svg?style=svg)](https://circleci.com/gh/trivago/parallel-webpack)
+[![Coverage Status](https://coveralls.io/repos/github/trivago/parallel-webpack/badge.svg?branch=coverage)](https://coveralls.io/github/trivago/parallel-webpack?branch=coverage)
 # parallel-webpack - Building multi-configs in parallel
 
 `parallel-webpack` allows you to run multiple webpack builds in parallel,
@@ -8,10 +10,18 @@ up your build. For us at [trivago](http://www.trivago.com) it has reduced
 the build from 16 minutes to just 2 minutes - for 32 variants. That performance
 improvement naturally comes at the expense of utilizing all available CPU cores.
 
+# IMPORTANT: Starting from 3.x watch mode will be dropped
+Starting from 3.x series we will drop support for watch mode. If you need it
+keep using ^2.2.0.
+
 ## Installation
 
 ```sh
 npm install parallel-webpack --save-dev
+
+# or
+
+yarn add --dev parallel-webpack
 ```
 
 You can choose whether to install `parallel-webpack` globally or locally.
@@ -127,17 +137,6 @@ The above configuration will create 16 variations of the build for you, which
 [WEBPACK] Started building MyLib.var.min.debug.js
 ```
 
-## Running the watcher
-
-One of the features that made webpack so popular is certainly its watcher which
-continously rebuilds your application.
-
-When using `parallel-webpack`, you can easily use the same feature as well by
-specifying the `--watch` option on the command line:
-
-```
-parallel-webpack --watch
-```
 
 ## Specifying retry limits
 
@@ -212,7 +211,8 @@ are no differences between various ways of invoking the `webpack.config.js`.
 ## Node.js API
 
 Just like webpack, you can also use `parallel-webpack` as an API from node.js
-(You can specify any other option used in [worker-farm](https://www.npmjs.com/package/worker-farm)):
+(For 2.x : you can specify any other option used in [worker-farm](https://www.npmjs.com/package/worker-farm)):
+(For 3.x : you can specify any other option used in [jest-worker](https://www.npmjs.com/package/jest-worker)):
 
 ```javascript
 var run = require('parallel-webpack').run,
@@ -222,7 +222,8 @@ run(configPath, {
     watch: false,
     maxRetries: 1,
     stats: true, // defaults to false
-    maxConcurrentWorkers: 2 // use 2 workers
+    maxConcurrentWorkers: 2, // use 2 workers if you are on 2.x version
+    maxWorkers: 2 // use 2 workers if you are in 3.x version
 });
 ```
 

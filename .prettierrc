@@ -1,0 +1,13 @@
+{
+    "singleQuote": true,
+    "tabWidth": 4,
+    "trailingComma": "all",
+    "overrides": [
+        {
+            "files": "**/build/**",
+            "options": {
+                "trailingComma": "es5"
+            }
+        }
+    ]
+}

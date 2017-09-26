@@ -1,5 +1,4 @@
-var assign = require('lodash.assign');
-var flatten = require('lodash.flatten');
+import { flatten, rearg } from 'lodash';
 
 /**
  * Creates configuration variants.
@@ -10,40 +9,34 @@ var flatten = require('lodash.flatten');
  *      transform the variant into a webpack configuration
  * @returns {*|Array}
  */
-module.exports = function createVariants(baseConfig, variants, configCallback) {
-    if(arguments.length < 3) {
-        if(arguments.length === 2) {
-            if(typeof variants === 'function') {
-                // createVariants(variants: Object, configCallback: Function)
-                configCallback = variants;
-                variants = baseConfig;
-                baseConfig = {};
-            }
-            // createVariants(baseConfig: Object, variants: Object)
-            // => don't do anything
-        } else {
-            // createVariants(variants: Object)
-            variants = baseConfig;
-            baseConfig = {};
-        }
-    }
-
+const createVariants = (baseConfig = {}, variants, configCallback) => {
     // Okay, so this looks a little bit messy but it really does make some sense.
     // Essentially, for each base configuration, we want to create every
     // possible combination of the configuration variants specified above.
-    var transforms = Object.keys(variants).map(function(key) {
-            return function(config) {
-                return variants[key].map(function(value) {
-                    var result = assign({}, config);
-                    result[key] = value;
-                    return result;
-                });
-            };
-        }),
-        configs = transforms.reduce(function(options, transform) {
-            return flatten(options.map(transform));
-        }, [baseConfig]);
+    const transforms = Object.keys(variants).map(key => config =>
+        variants[key].map(value => ({ ...config, [key]: value })),
+    );
+    const configs = transforms.reduce(
+        (options, transform) => flatten(options.map(transform)),
+        [baseConfig],
+    );
 
-
-    return configCallback && configs.map(configCallback) || configs;
+    return (configCallback && configs.map(configCallback)) || configs;
 };
+
+export default function variants(baseConfig, variants, configCallback) {
+    let fn = createVariants;
+    if (arguments.length === 2) {
+        if (typeof variants === 'function') {
+            // createVariants(variants: Object, configCallback: Function)
+            fn = rearg(createVariants, [2, 0, 1]);
+        }
+        // createVariants(baseConfig: Object, variants: Object)
+        // => don't do anything
+    } else if (arguments.length === 1) {
+        // createVariants(variants: Object)
+        fn = rearg(createVariants, [1, 0, 2]);
+    }
+
+    return fn(baseConfig, variants, configCallback);
+}
