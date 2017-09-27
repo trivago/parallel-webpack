@@ -5,8 +5,8 @@
 
 **Merged pull requests:**
 
-- watch mode done callback [\#55](https://github.com/parallel-webpack/pull/55) ([natedanner] (https://github.com/natedanner))
-- Update package.json to support webpack 3.1.0 [\#59](https://github.com/parallel-webpack/pull/59) ([clowNay] (https://github.com/clowNay))
+- watch mode done callback [\#55](https://github.com/trivago/parallel-webpack/pull/55) ([natedanner] (https://github.com/natedanner))
+- Update package.json to support webpack 3.1.0 [\#59](https://github.com/trivago/parallel-webpack/pull/59) ([clowNay] (https://github.com/clowNay))
 
 **Closed issues:**
 
@@ -17,11 +17,11 @@
 
 **Merged pull requests:**
 
-- Implement tests [\#44](https://github.com/parallel-webpack/pull/44) ([efegurkan] (https://github.com/efegurkan))
-- pass watch options to the compiler [\#46](https://github.com/parallel-webpack/pull/46) ([BenoitZugmeyer] (https://github.com/BenoitZugmeyer))
-- Adjust basic example [\#47](https://github.com/parallel-webpack/pull/47) ([Robbilie] (https://github.com/Robbilie))
-- support config as export function [\#48](https://github.com/parallel-webpack/pull/48) ([Robbilie] (https://github.com/Robbilie))
-- travis and circle-ci integrations [\#49](https://github.com/parallel-webpack/pull/49) ([efegurkan] (https://github.com/efegurkan))
+- Implement tests [\#44](https://github.com/trivago/parallel-webpack/pull/44) ([efegurkan] (https://github.com/efegurkan))
+- pass watch options to the compiler [\#46](https://github.com/trivago/parallel-webpack/pull/46) ([BenoitZugmeyer] (https://github.com/BenoitZugmeyer))
+- Adjust basic example [\#47](https://github.com/trivago/parallel-webpack/pull/47) ([Robbilie] (https://github.com/Robbilie))
+- support config as export function [\#48](https://github.com/trivago/parallel-webpack/pull/48) ([Robbilie] (https://github.com/Robbilie))
+- travis and circle-ci integrations [\#49](https://github.com/trivago/parallel-webpack/pull/49) ([efegurkan] (https://github.com/efegurkan))
 
 ## [v2.0.0](https://github.com/trivago/parallel-webpack/tree/v2.0.0) (2017-06-28)
 [Full Changelog](https://github.com/trivago/parallel-webpack/compare/v1.6.1...v2.0.0)
