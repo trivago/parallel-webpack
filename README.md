@@ -238,7 +238,7 @@ function notify() {
 run(configPath, options, notify);
 ```
 **NOTE:** In watch mode notify callback provided with Node.js API will run **only once**
-all of the builds are finished.
+when all of the builds are finished.
 
 ### createVariants
 
