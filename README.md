@@ -216,6 +216,7 @@ Just like webpack, you can also use `parallel-webpack` as an API from node.js
 ```javascript
 var run = require('parallel-webpack').run,
     configPath = require.resolve('./webpack.config.js');
+
 run(configPath, {
     watch: false,
     maxRetries: 1,
@@ -224,7 +225,24 @@ run(configPath, {
 });
 ```
 
+You can pass a notify callback as well.
+```javascript
+var run = require('parallel-webpack').run,
+    configPath = require.resolve('./webpack.config.js'),
+    options = {/*...*/};
+
+function notify() {
+// do things
+}
+
+run(configPath, options, notify);
+```
+**NOTE:** In watch mode notify callback provided with Node.js API will run **only once**
+all of the builds are finished.
+
 ### createVariants
+
+---
 
 #### createVariants(baseConfig: Object, variants: Object, configCallback: Function): Object[]
 
