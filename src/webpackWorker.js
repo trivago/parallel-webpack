@@ -1,7 +1,8 @@
 var Promise = require('bluebird'),
     chalk = require('chalk'),
     loadConfigurationFile = require('./loadConfigurationFile').default,
-    notifyIPCWatchCompileDone = require('./watchModeIPC').notifyIPCWatchCompileDone;
+    notifyIPCWatchCompileDone = require('./watchModeIPC').notifyIPCWatchCompileDone,
+    presetToOptions = require('webpack/lib/Stats').presetToOptions;
 /**
  * Choose the most correct version of webpack, prefer locally installed version,
  * fallback to the own dependency if there's none.
@@ -28,7 +29,12 @@ function getAppName(webpackConfig) {
 }
 
 function getOutputOptions(webpackConfig, options) {
-    var outputOptions = Object.create(webpackConfig.stats || {});
+    var stats = webpackConfig.stats;
+    // @see https://webpack.js.org/configuration/stats/
+    if (typeof stats === 'string') {
+        stats = presetToOptions(stats);
+    }
+    var outputOptions = Object.create(stats || {});
     if(typeof options.modulesSort !== 'undefined') {
         outputOptions.modulesSort = options.modulesSort;
     }
