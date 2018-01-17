@@ -1,5 +1,5 @@
 var jsVars = require('interpret').jsVariants,
-    endsWith = require('lodash').endsWith,
+    endsWith = require('lodash.endswith'),
     availableExts = Object.keys(jsVars),
     chalk = require('chalk');
 
