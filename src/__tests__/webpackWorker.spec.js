@@ -22,6 +22,7 @@ describe('webpackWorker', () => {
         jest.doMock('testConfig', () => ({ webpack: 'config' }), { virtual: true });
         jest.resetModules();
         jest.clearAllMocks();
+        process.removeAllListeners();
     });
 
     describe('arguments', () => {
