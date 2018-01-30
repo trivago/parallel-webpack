@@ -7,6 +7,7 @@ Array [
   Array [
     "/path/to/cfg",
     Object {
+      "color": false,
       "env": "prod",
       "optimize": false,
     },
@@ -16,6 +17,7 @@ Array [
   Array [
     "/path/to/cfg",
     Object {
+      "color": false,
       "env": "prod",
       "optimize": false,
     },
@@ -25,6 +27,7 @@ Array [
   Array [
     "/path/to/cfg",
     Object {
+      "color": false,
       "env": "prod",
       "optimize": false,
     },
