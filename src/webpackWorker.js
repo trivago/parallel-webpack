@@ -2,6 +2,7 @@ var Promise = require('bluebird'),
     chalk = require('chalk'),
     loadConfigurationFile = require('./loadConfigurationFile').default,
     notifyIPCWatchCompileDone = require('./watchModeIPC').notifyIPCWatchCompileDone,
+    notifyIPCWatchCallback = require('./watchModeIPC').notifyIPCWatchCallback,
     presetToOptions = require('webpack/lib/Stats').presetToOptions;
 /**
  * Choose the most correct version of webpack, prefer locally installed version,
@@ -135,10 +136,14 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
                 if(!watch) {
                     process.removeListener('SIGINT', shutdownCallback);
                     done(null, options.stats ? JSON.stringify(stats.toJson(outputOptions), null, 2) : '');
-                } else if (!hasCompletedOneCompile) {
-                    notifyIPCWatchCompileDone(index);
-                    hasCompletedOneCompile = true;
+                } else {
+                    notifyIPCWatchCallback(index);
+                    if (!hasCompletedOneCompile) {
+                        notifyIPCWatchCompileDone(index);
+                        hasCompletedOneCompile = true;
+                    }
                 }
+
             };
         if(!silent) {
             console.log('%s Started %s %s', chalk.blue('[WEBPACK]'), watch ? 'watching' : 'building', chalk.yellow(getAppName(webpackConfig)));

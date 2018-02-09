@@ -20,14 +20,14 @@ function notSilent(options) {
     return !options.json;
 }
 
-function startFarm(config, configPath, options, runWorker, callback) {
+function startFarm(config, configPath, options, runWorker, doneCallback, watchCallback) {
     config = Array.isArray(config) ? config : [config];
     options = options || {};
 
     // When in watch mode and a callback is provided start IPC server to invoke callback
     // once all webpack configurations have been compiled
     if (options.watch) {
-        startWatchIPCServer(callback, Object.keys(config));
+        startWatchIPCServer(doneCallback, watchCallback, Object.keys(config));
     }
 
     if(notSilent(options)) {
@@ -69,14 +69,16 @@ function startFarm(config, configPath, options, runWorker, callback) {
  *   on build error
  * @param {Function} [callback] A callback to be invoked once the build has
  *   been completed
+ * @param {Function} [watchCallback] A callback to be invoked on each configuration build complete in watch mode.
  * @return {Promise} A Promise that is resolved once all builds have been
  *   created
  */
-function run(configPath, options, callback) {
+function run(configPath, options, callback, watchCallback) {
     var config,
         argvBackup = process.argv,
         farmOptions = assign({}, options);
     options = options || {};
+
     if(options.colors === undefined) {
         options.colors = chalk.supportsColor;
     }
@@ -122,7 +124,8 @@ function run(configPath, options, callback) {
         configPath,
         options,
         Promise.promisify(workers),
-        callback
+        callback,
+        watchCallback
     ).error(function(err) {
         if(notSilent(options)) {
             console.log('%s Build failed after %s seconds', chalk.red('[WEBPACK]'), chalk.blue((Date.now() - startTime) / 1000));
