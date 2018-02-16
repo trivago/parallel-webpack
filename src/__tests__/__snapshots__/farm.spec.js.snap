@@ -1,0 +1,48 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Farm utils startFarm should bail out 1`] = `Array []`;
+
+exports[`Farm utils startFarm should run workers 1`] = `
+Array [
+  Array [
+    "/path/to/cfg",
+    Object {
+      "color": false,
+      "env": "prod",
+      "optimize": false,
+    },
+    0,
+    3,
+  ],
+  Array [
+    "/path/to/cfg",
+    Object {
+      "color": false,
+      "env": "prod",
+      "optimize": false,
+    },
+    1,
+    3,
+  ],
+  Array [
+    "/path/to/cfg",
+    Object {
+      "color": false,
+      "env": "prod",
+      "optimize": false,
+    },
+    2,
+    3,
+  ],
+]
+`;
+
+exports[`Farm utils startFarm should settle all results 1`] = `
+Array [
+  Array [
+    "[34m[WEBPACK][39m Building %s %s",
+    "[33m3[39m",
+    "targets",
+  ],
+]
+`;

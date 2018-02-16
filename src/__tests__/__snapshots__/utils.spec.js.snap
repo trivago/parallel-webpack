@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Utility functions loadConfig should reject when load is unsuccessful 1`] = `
+[Error: [31m[WEBPACK][39m Could not load configuration file [4m/path/to/webpack[24m 
+ Error: File not existing]
+`;
+
+exports[`Utility functions validateOptions should reject with error when validation is unsuccessful 1`] = `
+"Options validation failed:
+            Property: \\"options .forkOptions\\" should be object
+            "
+`;

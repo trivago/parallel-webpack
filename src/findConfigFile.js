@@ -1,36 +1,35 @@
-var potentialExtensions = [''].concat(Object.keys(require('interpret').jsVariants)),
-    fs = require('fs');
+import fs from 'fs';
+import { jsVariants } from 'interpret';
+import { decorate } from './logger';
 
-function existsWithAccess(path) {
+const potentialExtensions = ['', ...Object.keys(jsVariants)];
+
+const checkWithAccess = path => {
     try {
         fs.accessSync(path);
         return true;
-    } catch(ignore) {
+    } catch (ignore) {
         return false;
     }
-}
+};
 
-function exists(path) {
-    if(fs.accessSync) {
-        return existsWithAccess(path);
-    } else {
-        try {
-            var stats = fs.statSync(path);
-            return stats.isFile();
-        } catch(ignore) {
-            return false;
-        }
+const checkWithStatSync = path => {
+    try {
+        var stats = fs.statSync(path);
+        return stats.isFile();
+    } catch (ignore) {
+        return false;
     }
-}
+};
 
-module.exports = function(configPath) {
-    for(var i = 0, len = potentialExtensions.length; i < len; i++) {
-        var ext = potentialExtensions[i];
-        if(exists(configPath + ext)) {
-            // file exists, use that extension
-            return configPath + ext;
-        }
+const exists = path =>
+    fs.accessSync ? checkWithAccess(path) : checkWithStatSync(path);
+
+module.exports = configPath => {
+    const ext = potentialExtensions.find(ext => exists(configPath + ext));
+    // can be extensionless
+    if (ext !== undefined) {
+        return configPath + ext;
     }
-
-    throw new Error('File does not exist');
-}
+    throw new Error(decorate('File does not exist', 'red'));
+};

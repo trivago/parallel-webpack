@@ -1,0 +1,17 @@
+# Do not pack irrelevant dirs
+node_modules/
+coverage/
+__mocks__/
+__tests__/
+build/
+
+# Do not pack configs
+jest.config.js
+.circleci/
+.github/
+.babelrc
+.editorconfig
+.gitignore
+.prettierrc
+.travis.yml
+yarn.lock
