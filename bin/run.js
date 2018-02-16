@@ -27,7 +27,7 @@ let configPath;
 
 if (argv.version) {
     process.stdout.write(
-        'parallel-webpack ' + chalk.blue(require('../package').version) + '\n',
+        'parallel-webpack ' + chalk.blue(require('../package').version) + '\n'
     );
 } else {
     try {
@@ -55,8 +55,8 @@ if (argv.version) {
                                 return JSON.parse(stat);
                             }),
                             null,
-                            2,
-                        ) + '\n',
+                            2
+                        ) + '\n'
                     );
                 }
             })
@@ -73,7 +73,7 @@ if (argv.version) {
                 chalk.red('[WEBPACK]') +
                     ' Could not load configuration ' +
                     chalk.underline(process.cwd() + '/' + argv.config) +
-                    '\n',
+                    '\n'
             );
         }
         process.exit(1);
