@@ -19,7 +19,6 @@
 
 **Implemented enhancements:**
 
-- Expose API that takes array of webpack configs [\#51](https://github.com/trivago/parallel-webpack/issues/51)
 - On complete hook [\#39](https://github.com/trivago/parallel-webpack/issues/39)
 - Webpack 2 config export as function [\#34](https://github.com/trivago/parallel-webpack/issues/34)
 - watch mode done callback [\#55](https://github.com/trivago/parallel-webpack/pull/55) ([natedanner](https://github.com/natedanner))
