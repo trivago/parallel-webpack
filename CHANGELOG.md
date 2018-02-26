@@ -1,27 +1,45 @@
 # Change Log
 
-## [v2.2.0](https://github.com/trivago/parallel-webpack/tree/v2.2.0) (2017-09-19)
-[Full Changelog](https://github.com/trivago/parallel-webpack/compare/v2.1.0...v2.2.0)
+## [v2.3.0](https://github.com/trivago/parallel-webpack/tree/v2.3.0) (2018-02-26)
+[Full Changelog](https://github.com/trivago/parallel-webpack/compare/v2.2.0...v2.3.0)
+
 
 **Merged pull requests:**
 
-- watch mode done callback [\#55](https://github.com/trivago/parallel-webpack/pull/55) ([natedanner] (https://github.com/natedanner))
-- Update package.json to support webpack 3.1.0 [\#59](https://github.com/trivago/parallel-webpack/pull/59) ([clowNay] (https://github.com/clowNay))
+- Bump webpack peer dependency [\#78](https://github.com/trivago/parallel-webpack/pull/78) ([efegurkan](https://github.com/efegurkan))
+- injected Stats.presetToOptions to parse { stats: String } into Object [\#73](https://github.com/trivago/parallel-webpack/pull/73) ([oleg-andreyev](https://github.com/oleg-andreyev))
+- update lodash.endswith require [\#72](https://github.com/trivago/parallel-webpack/pull/72) ([oleg-andreyev](https://github.com/oleg-andreyev))
+- Add issue\_template [\#69](https://github.com/trivago/parallel-webpack/pull/69) ([efegurkan](https://github.com/efegurkan))
+- docs\(README\): add npm version badge [\#64](https://github.com/trivago/parallel-webpack/pull/64) ([alan-agius4](https://github.com/alan-agius4))
+- Fix pull request links in CHANGELOG.md [\#62](https://github.com/trivago/parallel-webpack/pull/62) ([valscion](https://github.com/valscion))
+- Incomplete replacement fix [\#61](https://github.com/trivago/parallel-webpack/pull/61) ([Luixo](https://github.com/Luixo))
 
-**Closed issues:**
+## [v2.2.0](https://github.com/trivago/parallel-webpack/tree/v2.2.0) (2017-09-19)
+[Full Changelog](https://github.com/trivago/parallel-webpack/compare/v2.1.0...v2.2.0)
 
+**Implemented enhancements:**
+
+- Expose API that takes array of webpack configs [\#51](https://github.com/trivago/parallel-webpack/issues/51)
 - On complete hook [\#39](https://github.com/trivago/parallel-webpack/issues/39)
+- Webpack 2 config export as function [\#34](https://github.com/trivago/parallel-webpack/issues/34)
+- watch mode done callback [\#55](https://github.com/trivago/parallel-webpack/pull/55) ([natedanner](https://github.com/natedanner))
+
+**Merged pull requests:**
+
+- Update package.json to support webpack 3.1.0 [\#59](https://github.com/trivago/parallel-webpack/pull/59) ([clowNay](https://github.com/clowNay))
+- Remove coveralls from circle-ci, disable colors [\#53](https://github.com/trivago/parallel-webpack/pull/53) ([efegurkan](https://github.com/efegurkan))
+- Add coverage support [\#50](https://github.com/trivago/parallel-webpack/pull/50) ([efegurkan](https://github.com/efegurkan))
 
 ## [v2.1.0](https://github.com/trivago/parallel-webpack/tree/v2.1.0) (2017-07-28)
 [Full Changelog](https://github.com/trivago/parallel-webpack/compare/v2.0.0...v2.1.0)
 
 **Merged pull requests:**
 
-- Implement tests [\#44](https://github.com/trivago/parallel-webpack/pull/44) ([efegurkan] (https://github.com/efegurkan))
-- pass watch options to the compiler [\#46](https://github.com/trivago/parallel-webpack/pull/46) ([BenoitZugmeyer] (https://github.com/BenoitZugmeyer))
-- Adjust basic example [\#47](https://github.com/trivago/parallel-webpack/pull/47) ([Robbilie] (https://github.com/Robbilie))
-- support config as export function [\#48](https://github.com/trivago/parallel-webpack/pull/48) ([Robbilie] (https://github.com/Robbilie))
-- travis and circle-ci integrations [\#49](https://github.com/trivago/parallel-webpack/pull/49) ([efegurkan] (https://github.com/efegurkan))
+- travis and circle-ci integrations [\#49](https://github.com/trivago/parallel-webpack/pull/49) ([efegurkan](https://github.com/efegurkan))
+- support config as export function v2 [\#48](https://github.com/trivago/parallel-webpack/pull/48) ([Robbilie](https://github.com/Robbilie))
+- Adjust basic example [\#47](https://github.com/trivago/parallel-webpack/pull/47) ([Robbilie](https://github.com/Robbilie))
+- Pass watch options to the compiler [\#46](https://github.com/trivago/parallel-webpack/pull/46) ([BenoitZugmeyer](https://github.com/BenoitZugmeyer))
+- Implement tests [\#44](https://github.com/trivago/parallel-webpack/pull/44) ([efegurkan](https://github.com/efegurkan))
 
 ## [v2.0.0](https://github.com/trivago/parallel-webpack/tree/v2.0.0) (2017-06-28)
 [Full Changelog](https://github.com/trivago/parallel-webpack/compare/v1.6.1...v2.0.0)
