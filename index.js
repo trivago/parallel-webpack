@@ -21,34 +21,36 @@ function notSilent(options) {
 }
 
 function startFarm(config, configPath, options, runWorker, callback) {
-    config = Array.isArray(config) ? config : [config];
-    options = options || {};
+    return Promise.resolve(config).then(function(config) {
+        config = Array.isArray(config) ? config : [config];
+        options = options || {};
 
-    // When in watch mode and a callback is provided start IPC server to invoke callback
-    // once all webpack configurations have been compiled
-    if (options.watch) {
-        startWatchIPCServer(callback, Object.keys(config));
-    }
+        // When in watch mode and a callback is provided start IPC server to invoke callback
+        // once all webpack configurations have been compiled
+        if (options.watch) {
+            startWatchIPCServer(callback, Object.keys(config));
+        }
 
-    if(notSilent(options)) {
-        console.log(chalk.blue('[WEBPACK]') + ' Building ' + chalk.yellow(config.length) + ' ' + pluralize('target', config.length));
-    }
+        if(notSilent(options)) {
+            console.log(chalk.blue('[WEBPACK]') + ' Building ' + chalk.yellow(config.length) + ' ' + pluralize('target', config.length));
+        }
 
-    var builds = config.map(function (c, i) {
-        return runWorker(configPath, options, i, config.length);
-    });
-    if(options.bail) {
-        return Promise.all(builds);
-    } else {
-        return Promise.settle(builds).then(function(results) {
-            return Promise.all(results.map(function (result) {
-                if(result.isFulfilled()) {
-                    return result.value();
-                }
-                return Promise.reject(result.reason());
-            }));
+        var builds = config.map(function (c, i) {
+            return runWorker(configPath, options, i, config.length);
         });
-    }
+        if(options.bail) {
+            return Promise.all(builds);
+        } else {
+            return Promise.settle(builds).then(function(results) {
+                return Promise.all(results.map(function (result) {
+                    if(result.isFulfilled()) {
+                        return result.value();
+                    }
+                    return Promise.reject(result.reason());
+                }));
+            });
+        }
+    })
 }
 
 /**

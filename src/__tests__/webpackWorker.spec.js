@@ -1,8 +1,9 @@
 const run = jest.fn();
 const close = jest.fn();
 const watch = jest.fn().mockReturnValue({ close });
+const compiler = jest.fn().mockReturnValue({ run, watch });
 
-jest.setMock('webpack',  () => ({ run, watch })); // try to get rid of this.
+jest.setMock('webpack', compiler); // try to get rid of this.
 jest.mock('../watchModeIPC');
 jest.mock('webpack/lib/Stats');
 
@@ -152,6 +153,7 @@ describe('webpackWorker', () => {
             const multiConfigTest = options => {
                 const errorMessage = '[WEBPACK] There is a difference between the amount of the provided configs. Maybe you where expecting command line arguments to be passed to your webpack.config.js. If so, you\'ll need to separate them with a -- from the parallel-webpack options.'
                 jest.doMock('multiTestConfig', () => ( [{ fail: true}, { webpack: 'config'}]), { virtual: true });
+                jest.doMock('testConfig', () => ({ webpack: 'config' }), { virtual: true });
                 jest.spyOn(console, 'error').mockImplementation(() => {});
 
                 webpackWorker(
@@ -161,11 +163,14 @@ describe('webpackWorker', () => {
                     options.expectedConfigs,
                     jest.fn()
                 );
+                const allConfigs = promiseMock.resolve.mock.calls[0][0];
+                const thenCb = promiseMock.then.mock.calls[0][0];
                 if (options.multi && options.expectedConfigs < 3) {
-                    const config = promiseMock.resolve.mock.calls[0][0];
-                    expect(config).toEqual({ webpack: 'config'});
+                    const targetConfig = allConfigs[options.configIndex];
+                    thenCb(allConfigs)
+                    expect(compiler.mock.calls[0][0]).toEqual(targetConfig);
                 } else {
-                    expect(promiseMock.reject).toHaveBeenLastCalledWith(errorMessage);
+                    expect(() => thenCb(allConfigs)).toThrow(errorMessage)
                     expect(console.error).toHaveBeenCalled();
                 }
             }
@@ -181,6 +186,24 @@ describe('webpackWorker', () => {
             it('should fail if expectedConfigLength dont match with config.length', () => {
                 multiConfigTest({ multi: true, configIndex: 1, expectedConfigs: 3 });
             });
+
+            it('should be able to handle config function return promise of array of config object', () => {
+                const originalConfigs = [{ webpack: 'config' }, { webpack: 'config2' }];
+                jest.doMock('promiseReturnConfigArray', () => Promise.resolve(originalConfigs), { virtual: true });
+                const configIndex = 1
+                const expectedConfigLength = 2
+                 webpackWorker(
+                    'promiseReturnConfigArray',
+                    { json: true },
+                    configIndex,
+                    expectedConfigLength,
+                    jest.fn()
+                )
+                const thenCb = promiseMock.then.mock.calls[0][0];
+                const targetConfig = originalConfigs[configIndex];
+                thenCb(originalConfigs);
+                expect(compiler.mock.calls[0][0]).toEqual(targetConfig);
+            })
         })
     });
 

@@ -70,24 +70,28 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
         process.argv = options.argv;
     }
     chalk.enabled = options.colors;
-    var config = loadConfigurationFile(configuratorFileName),
-        watch = !!options.watch,
-        silent = !!options.json;
-    if(expectedConfigLength !== 1 && !Array.isArray(config)
-            || Array.isArray(config) && config.length !== expectedConfigLength) {
-        if(config.length !== expectedConfigLength) {
-            var errorMessage = '[WEBPACK] There is a difference between the amount of the'
-                + ' provided configs. Maybe you where expecting command line'
-                + ' arguments to be passed to your webpack.config.js. If so,'
-                + " you'll need to separate them with a -- from the parallel-webpack options.";
-            console.error(errorMessage);
-            return Promise.reject(errorMessage);
+    var config = loadConfigurationFile(configuratorFileName)
+
+    Promise.resolve(config).then(function(config) {
+        var watch = !!options.watch,
+            silent = !!options.json;
+        if(expectedConfigLength !== 1 && !Array.isArray(config)
+                || (Array.isArray(config) && config.length !== expectedConfigLength)) {
+            if(config.length !== expectedConfigLength) {
+                var errorMessage = '[WEBPACK] There is a difference between the amount of the'
+                    + ' provided configs. Maybe you where expecting command line'
+                    + ' arguments to be passed to your webpack.config.js. If so,'
+                    + " you'll need to separate them with a -- from the parallel-webpack options.";
+                console.error(errorMessage);
+                throw Error(errorMessage);
+            }
         }
-    }
-    if(Array.isArray(config)) {
-        config = config[index];
-    }
-    Promise.resolve(config).then(function(webpackConfig) {
+        var webpackConfig;
+        if(Array.isArray(config)) {
+            webpackConfig = config[index];
+        } else {
+            webpackConfig = config
+        }
         var watcher,
             webpack = getWebpack(),
             hasCompletedOneCompile = false,
