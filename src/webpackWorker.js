@@ -99,7 +99,7 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
                 done({
                     message: chalk.red('[WEBPACK]') + ' Forcefully shut down ' + chalk.yellow(getAppName(webpackConfig))
                 });
-                process.exit(0);
+                process.exitCode = 0;
             },
             finishedCallback = function(err, stats) {
                 if(err) {
