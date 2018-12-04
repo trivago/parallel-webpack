@@ -1,4 +1,5 @@
 jest.mock('testConfig.js', () => ({}), { virtual: true });
+jest.useFakeTimers();
 
 import { run } from '../index';
 import workerFarm  from 'worker-farm';
@@ -121,6 +122,7 @@ describe('index.js', () => {
 
                 expect(process.listenerCount('SIGINT')).toBe(1);
                 cb();
+                jest.runOnlyPendingTimers();
                 expect(process.listenerCount('SIGINT')).toBe(0);
 
                 // called with workers

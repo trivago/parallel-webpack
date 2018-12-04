@@ -114,6 +114,15 @@ function run(configPath, options, callback) {
         workerFarm.end(workers);
     };
 
+    function injectTimeout(cb, time){
+        setTimeout(cb, time);
+    }
+
+    function finallCallback(){
+        workerFarm.end(workers);
+        process.removeListener("SIGINT", shutdownCallback);
+    }
+
     process.on('SIGINT', shutdownCallback);
 
     var startTime = Date.now();
@@ -139,11 +148,7 @@ function run(configPath, options, callback) {
             return results;
         }
     }).finally(function() {
-        var __timer = setTimeout(() => {
-            clearTimeout(__timer);
-            workerFarm.end(workers);
-            process.removeListener("SIGINT", shutdownCallback);
-        }, 10000);
+        injectTimeout(finallCallback, 10000);
     });
 
     if (!options.watch) {
@@ -151,6 +156,8 @@ function run(configPath, options, callback) {
     }
     return farmPromise;
 }
+
+
 
 module.exports = {
     createVariants: require('./src/createVariants'),
