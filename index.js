@@ -138,9 +138,12 @@ function run(configPath, options, callback) {
         if(results.length) {
             return results;
         }
-    }).finally(function () {
-        workerFarm.end(workers);
-        process.removeListener('SIGINT', shutdownCallback);
+    }).finally(function() {
+        var __timer = setTimeout(() => {
+            clearTimeout(__timer);
+            workerFarm.end(workers);
+            process.removeListener("SIGINT", shutdownCallback);
+        }, 10000);
     });
 
     if (!options.watch) {
