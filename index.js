@@ -118,7 +118,7 @@ function run(configPath, options, callback) {
         setTimeout(cb, time);
     }
 
-    function finallCallback(){
+    function finalCallback(){
         workerFarm.end(workers);
         process.removeListener("SIGINT", shutdownCallback);
     }
@@ -148,7 +148,7 @@ function run(configPath, options, callback) {
             return results;
         }
     }).finally(function() {
-        injectTimeout(finallCallback, 10000);
+        injectTimeout(finalCallback, 10000);
     });
 
     if (!options.watch) {
