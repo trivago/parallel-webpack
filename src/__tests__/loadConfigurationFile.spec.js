@@ -35,8 +35,8 @@ describe('loadConfigurationFile module', () => {
             '.eg'];
         // based on the test, we only care if the array is sorted based on the compare function
         // the result of the sort function seems to be different on node 6 and 11 but the expected
-        // values are sorted somewhat correctly, cause we only care in they have similar string
-        // structure as .babel.js
+        // values are sorted somewhat correctly, cause we only care if they have similar string
+        // structure as .babel.js has.
         // therefore we get the split length value and compare those two
 
         expect(sortedVariants.map(val => val.split(/\./).length)).toEqual(availableExtensions.map(val => val.split(/\./).length));
