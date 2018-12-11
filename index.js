@@ -157,8 +157,6 @@ function run(configPath, options, callback) {
     return farmPromise;
 }
 
-
-
 module.exports = {
     createVariants: require('./src/createVariants'),
     run: run
