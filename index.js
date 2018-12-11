@@ -114,8 +114,12 @@ function run(configPath, options, callback) {
         workerFarm.end(workers);
     };
 
-    function injectTimeout(cb, time){
-        setTimeout(cb, time);
+    function timeoutBeforeCallback(cb){
+        if(options.timeout){
+            setTimeout(cb, options.timeout);
+        } else {
+            cb();
+        }
     }
 
     function finalCallback(){
@@ -148,7 +152,7 @@ function run(configPath, options, callback) {
             return results;
         }
     }).finally(function() {
-        injectTimeout(finalCallback, 10000);
+        timeoutBeforeCallback(finalCallback);
     });
 
     if (!options.watch) {
