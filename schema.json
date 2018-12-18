@@ -7,6 +7,6 @@
         "maxConcurrentCalls": { "type": "number" },
         "maxCallTime": { "type": "number" },
         "maxRetries": { "type": "number", "default": 0 },
-        "timeout": { "type": "number" }
+        "keep-alive-after-finish": { "type": "number" }
     }
 }

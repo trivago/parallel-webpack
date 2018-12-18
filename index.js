@@ -114,9 +114,9 @@ function run(configPath, options, callback) {
         workerFarm.end(workers);
     };
 
-    function timeoutBeforeCallback(cb){
-        if(options.timeout){
-            setTimeout(cb, options.timeout);
+    function keepAliveAfterFinishCallback(cb){
+        if(options.keepAliveAfterFinish){
+            setTimeout(cb, options.keepAliveAfterFinish);
         } else {
             cb();
         }
@@ -152,7 +152,7 @@ function run(configPath, options, callback) {
             return results;
         }
     }).finally(function() {
-        timeoutBeforeCallback(finalCallback);
+        keepAliveAfterFinishCallback(finalCallback);
     });
 
     if (!options.watch) {
