@@ -128,6 +128,18 @@ describe('index.js', () => {
                 // called with workers
                 expect(workerFarm.end.mock.calls[0][0]).toBe(workerFarm.end);
             });
+            it('should call keepAliveAfterFinishCallback if flag is set', () => {
+                const options = {};
+                Object.defineProperty(options, 'keepAliveAfterFinish', {
+                    value: 500
+                });
+                const keepAliveAfterFinishCallback = jest.fn(() => {
+                    setTimeout(expect.any(Function), options.keepAliveAfterFinish);
+                });
+                keepAliveAfterFinishCallback();
+                expect(setTimeout).toHaveBeenCalledTimes(1);
+                expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 500);
+            });
         });
 
         describe('shutdownCallback', () => {
