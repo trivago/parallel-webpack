@@ -6,6 +6,7 @@
         "maxConcurrentCallsPerWorker": { "type": "number" },
         "maxConcurrentCalls": { "type": "number" },
         "maxCallTime": { "type": "number" },
-        "maxRetries": { "type": "number", "default": 0 }
+        "maxRetries": { "type": "number", "default": 0 },
+        "keep-alive-after-finish": { "type": "number" }
     }
 }

@@ -47,6 +47,7 @@ if(argv.version) {
             exclude: argv['display-exclude'],
             colors: argv['colors'],
             stats: argv['stats'],
+            keepAliveAfterFinish: argv['keep-alive-after-finish'],
             argv: argv['--']
         }).then(function(stats) {
             if(argv.json && stats) {

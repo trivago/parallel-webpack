@@ -1,4 +1,5 @@
 jest.mock('testConfig.js', () => ({}), { virtual: true });
+jest.useFakeTimers();
 
 import { run } from '../index';
 import workerFarm  from 'worker-farm';
@@ -121,10 +122,23 @@ describe('index.js', () => {
 
                 expect(process.listenerCount('SIGINT')).toBe(1);
                 cb();
+                jest.runOnlyPendingTimers();
                 expect(process.listenerCount('SIGINT')).toBe(0);
 
                 // called with workers
                 expect(workerFarm.end.mock.calls[0][0]).toBe(workerFarm.end);
+            });
+            it('should call keepAliveAfterFinishCallback if flag is set', () => {
+                const options = {};
+                Object.defineProperty(options, 'keepAliveAfterFinish', {
+                    value: 500
+                });
+                const keepAliveAfterFinishCallback = jest.fn(() => {
+                    setTimeout(expect.any(Function), options.keepAliveAfterFinish);
+                });
+                keepAliveAfterFinishCallback();
+                expect(setTimeout).toHaveBeenCalledTimes(1);
+                expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 500);
             });
         });
 

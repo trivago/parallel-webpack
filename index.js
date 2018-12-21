@@ -114,6 +114,19 @@ function run(configPath, options, callback) {
         workerFarm.end(workers);
     };
 
+    function keepAliveAfterFinishCallback(cb){
+        if(options.keepAliveAfterFinish){
+            setTimeout(cb, options.keepAliveAfterFinish);
+        } else {
+            cb();
+        }
+    }
+
+    function finalCallback(){
+        workerFarm.end(workers);
+        process.removeListener("SIGINT", shutdownCallback);
+    }
+
     process.on('SIGINT', shutdownCallback);
 
     var startTime = Date.now();
@@ -138,9 +151,8 @@ function run(configPath, options, callback) {
         if(results.length) {
             return results;
         }
-    }).finally(function () {
-        workerFarm.end(workers);
-        process.removeListener('SIGINT', shutdownCallback);
+    }).finally(function() {
+        keepAliveAfterFinishCallback(finalCallback);
     });
 
     if (!options.watch) {
