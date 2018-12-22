@@ -22,8 +22,9 @@ describe('watchDoneHandler', () => {
         it('should stop server and invoke callback', () => {
             let configIndices = [0, 1];
             let callback = jest.fn();
-            watchDoneHandler(callback, ipc, configIndices, 0);
-            watchDoneHandler(callback, ipc, configIndices, 1);
+            let dontStop = false;
+            watchDoneHandler(callback, ipc, configIndices, dontStop, 0);
+            watchDoneHandler(callback, ipc, configIndices, dontStop, 1);
             expect(configIndices).toEqual([]);
             expect(callback).toHaveBeenCalled();
             expect(ipc.server.stop).toHaveBeenCalled();
@@ -32,8 +33,9 @@ describe('watchDoneHandler', () => {
         it('should stop server', () => {
             let configIndices = [0, 1];
             let callback = jest.fn();
-            watchDoneHandler(null, ipc, configIndices, 0);
-            watchDoneHandler(null, ipc, configIndices, 1);
+            let dontStop = false;
+            watchDoneHandler(null, ipc, configIndices, dontStop, 0);
+            watchDoneHandler(null, ipc, configIndices, dontStop, 1);
             expect(configIndices).toEqual([]);
             expect(ipc.server.stop).toHaveBeenCalled();
         });

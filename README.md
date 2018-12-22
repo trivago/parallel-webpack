@@ -239,6 +239,30 @@ function notify() {
 
 run(configPath, options, notify);
 ```
+
+You can pass a notify callback for every webpack watch callback as well.
+```javascript
+var run = require('parallel-webpack').run,
+    configPath = require.resolve('./webpack.config.js'),
+    options = {/*...*/};
+
+let qeueu = [];
+run(configPath, options, () => {
+    console.log('[webpack-parallel] every configuration has been compiled. I will not be invoked anymore');
+}, (list, i) => {
+    if (qeueu.length === 0) {
+        qeueu = list.map(Number);
+    }
+    console.log(`[webpack-parallel] configuration #${i} is compiled in watch mode.`);
+    if (qeueu.includes(i)) {
+        qeueu.splice(qeueu.indexOf(i), 1);
+        if (qeueu.length === 0) {
+            console.log(`[webpack-parallel] all configurations(${list.join(',')}) were compiled in watch mode.`);
+        }
+    }
+});
+```
+
 **NOTE:** In watch mode notify callback provided with Node.js API will run **only once**
 when all of the builds are finished.
 
