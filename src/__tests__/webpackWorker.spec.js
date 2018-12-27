@@ -150,7 +150,7 @@ describe('webpackWorker', () => {
 
         describe('multi config options', () => {
             const multiConfigTest = options => {
-                const errorMessage = '[WEBPACK] There is a difference between the amount of the provided configs. Maybe you where expecting command line arguments to be passed to your webpack.config.js. If so, you\'ll need to separate them with a -- from the parallel-webpack options.'
+                const errorMessage = '[WEBPACK] There is a difference between the amount of the provided configs. Maybe you were expecting command line arguments to be passed to your webpack.config.js. If so, you\'ll need to separate them with a -- from the parallel-webpack options.'
                 jest.doMock('multiTestConfig', () => ( [{ fail: true}, { webpack: 'config'}]), { virtual: true });
                 jest.spyOn(console, 'error').mockImplementation(() => {});
 
