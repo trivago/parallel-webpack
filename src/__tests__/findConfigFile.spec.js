@@ -1,12 +1,14 @@
 jest.mock('fs');
 
-import findConfigFile from '../findConfigFile';
 import fs from 'fs';
+
+import findConfigFile from '../findConfigFile';
 
 const possibleExtensions = [
     '',
     '.js',
     '.babel.js',
+    '.babel.ts',
     '.buble.js',
     '.cirru',
     '.cjsx',
@@ -14,6 +16,7 @@ const possibleExtensions = [
     '.coffee',
     '.coffee.md',
     '.eg',
+    '.esm.js',
     '.iced',
     '.iced.md',
     '.jsx',
@@ -21,6 +24,7 @@ const possibleExtensions = [
     '.liticed',
     '.ls',
     '.ts',
+    '.tsx',
     '.wisp'
 ];
 
@@ -53,7 +57,7 @@ describe('findConfigFile', () => {
             findConfigFile('/path/to/file')
         }).toThrow();
 
-        expect(fs.statSync).toHaveBeenCalledTimes(18);
+        expect(fs.statSync).toHaveBeenCalledTimes(possibleExtensions.length);
     });
 
     it('should return file from accessSync', () => {
