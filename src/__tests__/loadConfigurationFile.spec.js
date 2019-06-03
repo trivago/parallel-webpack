@@ -16,6 +16,8 @@ describe('loadConfigurationFile module', () => {
     it('should sort the extensions', () => {
         let unsortedVariants = Object.keys(jsVariants);
         let sortedVariants = [
+            '.babel.js',
+            '.babel.ts',
             '.buble.js',
             '.coffee.md',
             '.babel.js',
@@ -32,6 +34,7 @@ describe('loadConfigurationFile module', () => {
             '.liticed',
             '.ls',
             '.ts',
+            '.tsx',
             '.eg'];
         // based on the test, we only care if the array is sorted based on the compare function
         // the result of the sort function seems to be different on node 6 and 11 but the expected
