@@ -57,7 +57,7 @@ if(argv.version) {
             }
         }).catch(function(err) {
             console.log(err.message);
-            process.exit(1);
+            process.exitCode = 1;
         });
     } catch (e) {
         if(e.message) {
@@ -66,6 +66,6 @@ if(argv.version) {
         } else {
             process.stdout.write(chalk.red('[WEBPACK]') + ' Could not load configuration ' + chalk.underline(process.cwd() + '/' + argv.config) + "\n");
         }
-        process.exit(1);
+        process.exitCode = 1;
     }
 }

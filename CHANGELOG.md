@@ -1,5 +1,8 @@
 # Change Log
 
+# master
+- Switch from `process.exit()` to `process.exitCode` to prevent cutting off async writes
+
 ## [v2.3.0](https://github.com/trivago/parallel-webpack/tree/v2.3.0) (2018-02-26)
 [Full Changelog](https://github.com/trivago/parallel-webpack/compare/v2.2.0...v2.3.0)
 
