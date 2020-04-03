@@ -76,7 +76,7 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
         var watch = !!options.watch,
             silent = !!options.json;
         if(expectedConfigLength !== 1 && !Array.isArray(config)
-                || (Array.isArray(config) && config.length !== expectedConfigLength)) {
+            || (Array.isArray(config) && config.length !== expectedConfigLength)) {
             if(config.length !== expectedConfigLength) {
                 var errorMessage = '[WEBPACK] There is a difference between the amount of the'
                     + ' provided configs. Maybe you where expecting command line'
@@ -105,11 +105,25 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
                 });
                 process.exit(0);
             },
+            exitCallback = function(code) {
+                if (code === 0) {
+                    return;
+                }
+                if(watcher) {
+                    watcher.close(done);
+                }
+                done({
+                    message: chalk.red('[WEBPACK]')
+                        + ' Exit ' + chalk.yellow(getAppName(webpackConfig))
+                        + ' with code ' + code
+                });
+            },
             finishedCallback = function(err, stats) {
                 if(err) {
                     console.error('%s fatal error occured', chalk.red('[WEBPACK]'));
                     console.error(err);
                     process.removeListener('SIGINT', shutdownCallback);
+                    process.removeListener('exit', exitCallback);
                     return done(err);
                 }
                 if(stats.compilation.errors && stats.compilation.errors.length) {
@@ -121,6 +135,7 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
                         console.log(message);
                     } else {
                         process.removeListener('SIGINT', shutdownCallback);
+                        process.removeListener('exit', exitCallback);
                         return done({
                             message: message,
                             stats: JSON.stringify(stats.toJson(outputOptions), null, 2)
@@ -138,6 +153,7 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
                 }
                 if(!watch) {
                     process.removeListener('SIGINT', shutdownCallback);
+                    process.removeListener('exit', exitCallback);
                     done(null, options.stats ? JSON.stringify(stats.toJson(outputOptions), null, 2) : '');
                 } else if (!hasCompletedOneCompile) {
                     notifyIPCWatchCompileDone(index);
@@ -155,5 +171,6 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
         }
 
         process.on('SIGINT', shutdownCallback);
+        process.on('exit', exitCallback);
     });
 };
