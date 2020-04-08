@@ -1,14 +1,22 @@
 # Change Log
 
-## [v2.4.0](https://github.com/trivago/parallel-webpack/tree/v2.4.0) (2020-04-03)
+## [v2.6.0](https://github.com/trivago/parallel-webpack/tree/v2.6.0) (2020-04-08)
 
-[Full Changelog](https://github.com/trivago/parallel-webpack/compare/v2.3.0...v2.4.0)
+[Full Changelog](https://github.com/trivago/parallel-webpack/compare/v2.5.0...v2.6.0)
+
+**Merged pull requests:**
+
+-   Fail build and exit child processes on unhandledRejection or disconnect [\#100](https://github.com/trivago/parallel-webpack/pull/100) ([uzi88](https://github.com/uzi88))
+
+## [v2.5.0](https://github.com/trivago/parallel-webpack/tree/v2.5.0) (2020-04-03)
+
+[Full Changelog](https://github.com/trivago/parallel-webpack/compare/v2.3.0...v2.5.0)
 
 **Merged pull requests:**
 
 -   Handle config function return promise of config object array [\#84](https://github.com/trivago/parallel-webpack/pull/84) ([chesan](https://github.com/chesan))
 -   Give more time to workers to finish the process [\#89](https://github.com/trivago/parallel-webpack/pull/89) ([byara](https://github.com/byara))
--   Signal fail worker process exit and finish idle process [\#99](https://github.com/trivago/parallel-webpack/pull/99) ([chesan](https://github.com/uzi88))
+-   Signal fail worker process exit and finish idle process [\#99](https://github.com/trivago/parallel-webpack/pull/99) ([uzi88](https://github.com/uzi88))
 
 ## [v2.3.0](https://github.com/trivago/parallel-webpack/tree/v2.3.0) (2018-02-26)
 
