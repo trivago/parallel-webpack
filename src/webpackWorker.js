@@ -17,7 +17,9 @@ function getWebpack() {
 }
 
 function getAppName(webpackConfig) {
-    var appName = webpackConfig.name || webpackConfig.output.filename;
+    var appName = webpackConfig.name
+        || webpackConfig.output && webpackConfig.output.filename
+        || String(process.pid);
     if(~appName.indexOf('[name]') && typeof webpackConfig.entry === 'object') {
         var entryNames = Object.keys(webpackConfig.entry);
         if(entryNames.length === 1) {
@@ -92,78 +94,23 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
         } else {
             webpackConfig = config
         }
-        var watcher,
-            webpack = getWebpack(),
-            hasCompletedOneCompile = false,
-            outputOptions = getOutputOptions(webpackConfig, options),
-            shutdownCallback = function() {
-                if(watcher) {
-                    watcher.close(done);
-                }
-                done({
-                    message: chalk.red('[WEBPACK]') + ' Forcefully shut down ' + chalk.yellow(getAppName(webpackConfig))
-                });
-                process.exit(0);
-            },
-            exitCallback = function(code) {
-                if (code === 0) {
-                    return;
-                }
-                if(watcher) {
-                    watcher.close(done);
-                }
-                done({
-                    message: chalk.red('[WEBPACK]')
-                        + ' Exit ' + chalk.yellow(getAppName(webpackConfig))
-                        + ' with code ' + code
-                });
-            },
-            finishedCallback = function(err, stats) {
-                if(err) {
-                    console.error('%s fatal error occured', chalk.red('[WEBPACK]'));
-                    console.error(err);
-                    process.removeListener('SIGINT', shutdownCallback);
-                    process.removeListener('exit', exitCallback);
-                    return done(err);
-                }
-                if(stats.compilation.errors && stats.compilation.errors.length) {
-                    var message = chalk.red('[WEBPACK]') + ' Errors building ' + chalk.yellow(getAppName(webpackConfig)) + "\n"
-                        + stats.compilation.errors.map(function(error) {
-                            return error.message;
-                        }).join("\n");
-                    if(watch) {
-                        console.log(message);
-                    } else {
-                        process.removeListener('SIGINT', shutdownCallback);
-                        process.removeListener('exit', exitCallback);
-                        return done({
-                            message: message,
-                            stats: JSON.stringify(stats.toJson(outputOptions), null, 2)
-                        });
-                    }
-                }
-                if(!silent) {
-                    if(options.stats) {
-                        console.log(stats.toString(outputOptions));
-                    }
-                    var timeStamp = watch
-                        ? ' ' + chalk.yellow(new Date().toTimeString().split(/ +/)[0])
-                        : '';
-                    console.log('%s Finished building %s within %s seconds', chalk.blue('[WEBPACK' + timeStamp + ']'), chalk.yellow(getAppName(webpackConfig)), chalk.blue((stats.endTime - stats.startTime) / 1000));
-                }
-                if(!watch) {
-                    process.removeListener('SIGINT', shutdownCallback);
-                    process.removeListener('exit', exitCallback);
-                    done(null, options.stats ? JSON.stringify(stats.toJson(outputOptions), null, 2) : '');
-                } else if (!hasCompletedOneCompile) {
-                    notifyIPCWatchCompileDone(index);
-                    hasCompletedOneCompile = true;
-                }
-            };
+
+        var MSG_ERROR = chalk.red('[WEBPACK]');
+        var MSG_SUCCESS = chalk.blue('[WEBPACK]');
+        var MSG_APP = chalk.yellow(getAppName(webpackConfig));
+
+        var watcher;
+        var webpack = getWebpack();
+        var hasCompletedOneCompile = false;
+        var outputOptions = getOutputOptions(webpackConfig, options);
+        var disconnected = false;
+
         if(!silent) {
-            console.log('%s Started %s %s', chalk.blue('[WEBPACK]'), watch ? 'watching' : 'building', chalk.yellow(getAppName(webpackConfig)));
+            console.log('%s Started %s %s', MSG_SUCCESS, watch ? 'watching' : 'building', MSG_APP);
         }
+
         var compiler = webpack(webpackConfig);
+
         if(watch || webpack.watch) {
             watcher = compiler.watch(webpackConfig.watchOptions, finishedCallback);
         } else {
@@ -172,5 +119,94 @@ module.exports = function(configuratorFileName, options, index, expectedConfigLe
 
         process.on('SIGINT', shutdownCallback);
         process.on('exit', exitCallback);
+        process.on('unhandledRejection', unhandledRejectionCallback);
+        process.on('disconnect', disconnectCallback);
+
+        function cleanup() {
+            process.removeListener('SIGINT', shutdownCallback);
+            process.removeListener('exit', exitCallback);
+            process.removeListener('unhandledRejection', unhandledRejectionCallback);
+            process.removeListener('disconnect', disconnectCallback);
+        }
+
+        function shutdownCallback() {
+            if(watcher) {
+                watcher.close(done);
+            }
+            done({
+                message: MSG_ERROR + ' Forcefully shut down ' + MSG_APP
+            });
+            process.exit(0);
+        }
+
+        function unhandledRejectionCallback(error) {
+            console.log(MSG_ERROR + 'Build child process error:', error);
+            process.exit(1);
+        }
+
+        function exitCallback(code) {
+            cleanup();
+            if (code === 0) {
+                return;
+            }
+            if(watcher) {
+                watcher.close(done);
+            }
+            done({
+                message: MSG_ERROR + ' Exit ' + MSG_APP + ' with code ' + code
+            });
+        }
+
+        function disconnectCallback(){
+            disconnected = true;
+            console.log('%s Parent process terminated, exit building %s', MSG_ERROR, MSG_APP);
+            process.exit(1);
+        }
+
+        function finishedCallback(err, stats) {
+            if(err) {
+                console.error('%s fatal error occured', MSG_ERROR);
+                console.error(err);
+                cleanup();
+                return done(err);
+            }
+            if(stats.compilation.errors && stats.compilation.errors.length) {
+                var message = MSG_ERROR + ' Errors building ' + MSG_APP + "\n"
+                    + stats.compilation.errors.map(function(error) {
+                        return error.message;
+                    }).join("\n");
+                if(watch) {
+                    console.log(message);
+                } else {
+                    cleanup();
+                    if (disconnected) {
+                        return;
+                    }
+                    return done({
+                        message: message,
+                        stats: JSON.stringify(stats.toJson(outputOptions), null, 2)
+                    });
+                }
+            }
+            if(!silent) {
+                if(options.stats) {
+                    console.log(stats.toString(outputOptions));
+                }
+                var timeStamp = watch
+                    ? ' ' + chalk.yellow(new Date().toTimeString().split(/ +/)[0])
+                    : '';
+                console.log('%s Finished building %s within %s seconds', chalk.blue('[WEBPACK' + timeStamp + ']'), MSG_APP, chalk.blue((stats.endTime - stats.startTime) / 1000));
+            }
+            if(!watch) {
+                cleanup();
+                if (disconnected) {
+                    return;
+                }
+                done(null, options.stats ? JSON.stringify(stats.toJson(outputOptions), null, 2) : '');
+            } else if (!hasCompletedOneCompile) {
+                notifyIPCWatchCompileDone(index);
+                hasCompletedOneCompile = true;
+            }
+        }
     });
 };
